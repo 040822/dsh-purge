@@ -1,6 +1,6 @@
 {
   "name": "dsh-purge",
-  "version": "1.1.24",
+  "version": "1.1.25",
   "description": "DeepSeek Harness 网络安全红队工具：本机官方 Harness 受控评测与清洗，不同模型可换不同提示词；默认提示词面向国模「小码酱」。求 Star ⭐",
   "type": "module",
   "main": "lib/index.js",
@@ -33,7 +33,8 @@
     "test:update": "node scripts/test-update-guards.mjs",
     "test:rewind": "node scripts/test-rewind-plan.mjs",
     "test:idempotence": "node scripts/test-patch-idempotence.mjs",
-    "test:surface": "node scripts/test-surface-desktop.mjs"
+    "test:surface": "node scripts/test-surface-desktop.mjs",
+    "test:profile-patch": "node scripts/test-user-profile-patch.mjs"
   },
   "license": "MIT",
   "keywords": [

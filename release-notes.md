@@ -1,3 +1,16 @@
+# 1.1.25
+
+## 中文
+
+- **修复 [#43](https://github.com/YuJunZhiXue/dsh-purge/issues/43)**：不再把 `profiles/*/cordis.patch.yml`（用户 patch 层）纳入 `backupAll`/`revertAll`；升级自愈时不会用旧 bak 覆盖用户后来追加的 `insert`。
+- 启动/还原时主动丢掉历史上误建的 `cordis.patch.yml.dshpurge.bak`，保留当前用户文件。
+- 新增 `npm run test:profile-patch`。
+
+## English
+
+- **Fix [#43](https://github.com/YuJunZhiXue/dsh-purge/issues/43)**: stop including `profiles/*/cordis.patch.yml` (user patch layer) in `backupAll`/`revertAll`, so upgrade reapply no longer restores an old bak over later user `insert`s.
+- Drop stale `cordis.patch.yml.dshpurge.bak` without restoring; keep the live user file.
+- Add `npm run test:profile-patch`.
 # 1.1.24
 
 ## 中文
