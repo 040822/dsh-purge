@@ -1,3 +1,16 @@
+# 1.1.24
+
+## 中文
+
+- **修复 [#40](https://github.com/YuJunZhiXue/dsh-purge/issues/40)**：`pathLooksDesktop` 不再仅凭路径里的 `deepseek-harness` 子串把源码版判成桌面端；需带 `resources/` / `.exe` / `.app` 等安装形态。
+- **修复 [#41](https://github.com/YuJunZhiXue/dsh-purge/issues/41)**：源码部署的 `apps/cli`（tsdown 构建产物）禁止 hide-console 注入；`revertAll` 在无 `.dshpurge.bak` 时只跳过、绝不删除目标文件。
+- 新增 `npm run test:surface` 回归。
+
+## English
+
+- **Fix [#40](https://github.com/YuJunZhiXue/dsh-purge/issues/40)**: `pathLooksDesktop` no longer treats source trees as desktop just because the path contains `deepseek-harness`; require install shapes (`resources/`, `.exe`, `.app`).
+- **Fix [#41](https://github.com/YuJunZhiXue/dsh-purge/issues/41)**: skip hide-console injection into source `apps/cli` build output; `revertAll` never deletes targets when `.dshpurge.bak` is missing.
+- Add `npm run test:surface`.
 # 1.1.23
 
 ## 中文
