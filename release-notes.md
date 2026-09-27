@@ -1,3 +1,19 @@
+# 1.1.22
+
+## 中文
+
+- **修复官方桌面点「应用」报 ENOENT**。`app.asar` 还在时，新建 `dsh-purge-child-process-hide.mjs` 会失败，路径被写成 `resources\app.asar\...\dsh-purge-child-process-hide.mjs`，补丁停在待应用。
+- **原因**：官方客户端还带着 `app.asar` 时，Electron 会把 `resources\app` 映射进这个归档。归档里没有的新文件，用普通文件接口去创建就会 ENOENT。
+- **两种写法都保留**。归档还在时，改写真实磁盘上的 `resources\app`。没有 `app.asar` 时仍用原来的 `node:fs`，包括 Web、社区桌面，以及官方包已经解开并把归档挪成 `app.asar.bak` 的情况。
+- 安装目录不写死盘符。Web 和社区桌面的应用、重启保持原样。宿主仍对准 **dsh 0.1.7-rc.2**。
+
+## English
+
+- **Fixes ENOENT when Apply runs on the official desktop.** While `app.asar` is still present, creating `dsh-purge-child-process-hide.mjs` failed. The path was rewritten to `resources\app.asar\...\dsh-purge-child-process-hide.mjs`, and patches stayed pending.
+- **Cause**: with the archive still in place, Electron maps `resources\app` into `app.asar`. Creating a file that is not already in the archive through the normal file API throws ENOENT.
+- **Both write paths stay.** If the archive is still there, files are written on the real `resources\app` directory. If there is no `app.asar`, the previous `node:fs` path is unchanged. That covers Web, community desktop, and an official install that has already been unpacked and had the archive moved to `app.asar.bak`.
+- Install paths are not pinned to a drive letter. Web and community desktop keep their existing Apply and restart. The host target remains **dsh 0.1.7-rc.2**.
+
 # 1.1.21
 
 ## 中文
