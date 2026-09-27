@@ -1,3 +1,19 @@
+# 1.1.23
+
+## 中文
+
+- **修复 [#38](https://github.com/YuJunZhiXue/dsh-purge/issues/38)**：`#1`/`#2`/`#3` 提示词补丁每次 `apply` 叠加约 +841 字符、永不收敛。
+- **原因**：替换产物仍以前一版文本为前缀，且未设 `skipIfMarked`，`autoApplyOnStart` 每轮都会再写一层。
+- **修复**：为 `#1`/`#2`/`#3` 补 `skipIfMarked: true`（[#42](https://github.com/YuJunZhiXue/dsh-purge/pull/42)），并加 `npm run test:idempotence` 回归。
+- 已膨胀的宿主文件不会自动缩回，需还原 `.dshpurge.bak` 或重装 dsh 后再 apply。
+
+## English
+
+- **Fix [#38](https://github.com/YuJunZhiXue/dsh-purge/issues/38)**: prompt patches `#1`/`#2`/`#3` grew by ~+841 chars on every `apply` and never converged.
+- **Cause**: replacement text still starts with the previous pattern, and `skipIfMarked` was missing, so `autoApplyOnStart` rewrote every boot.
+- **Fix**: set `skipIfMarked: true` on `#1`/`#2`/`#3` ([#42](https://github.com/YuJunZhiXue/dsh-purge/pull/42)); add `npm run test:idempotence`.
+- Already-bloated host files are not auto-shrunk — restore `.dshpurge.bak` or reinstall dsh, then apply again.
+
 # 1.1.22
 
 ## 中文
