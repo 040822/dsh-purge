@@ -1714,8 +1714,11 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 		function keepListedVersion(item, ceiling) {
 			const ver = String((item && (item.version || item.ref)) || "").replace(/^v/i, "");
 			if (/^1\.1\.11-beta/i.test(ver)) return false;
-			if (item && item.channel === "beta" && ceiling && !listedVersionNewer(ver, ceiling)) return false;
-			return true;
+			if (!item || item.channel !== "beta") return true;
+			// 与 lib/update.hideListedVersion 一致：测试 tip / beta 分支始终可见（并行通道）。
+			if (item.ref === "beta" || item.kind === "head" || item.latest) return true;
+			if (!ceiling) return true;
+			return listedVersionNewer(ver, ceiling);
 		}
 
 		function preferListed(list, localVer) {

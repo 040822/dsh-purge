@@ -1,3 +1,15 @@
+# 1.1.28
+
+## 中文
+
+- **修复更新失败 `http 302`**：下载改为直连 `codeload.github.com`，并手动跟随跳转，避免 Electron/部分 Node 对 github.com → codeload 的 302 处理失败。
+- **修复测试版列表空白**：前端 `keepListedVersion` 与后端一致，正式版已发布时仍保留 beta tip / `beta` 分支；tip SHA 拉不到时回退 raw/jsDelivr 探测。
+
+## English
+
+- **Fix update failure `http 302`**: download via `codeload.github.com` and follow redirects manually so Electron/some Node builds no longer stall on github.com → codeload 302.
+- **Fix empty beta list**: client `keepListedVersion` matches the server — keep the beta tip / `beta` branch after stable ships; fall back to raw/jsDelivr when tip SHA cannot be fetched.
+
 # 1.1.27
 
 ## 中文

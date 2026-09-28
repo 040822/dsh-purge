@@ -11,10 +11,10 @@ assert.equal(safeUpdateRef("origin/master"), "");
 assert.equal(safeUpdateRef("../evil"), "");
 assert.equal(safeUpdateRef("master;rm"), "");
 
-const masterTar = "https://github.com/YuJunZhiXue/dsh-purge/archive/refs/heads/master.tar.gz";
+const masterTar = "https://codeload.github.com/YuJunZhiXue/dsh-purge/tar.gz/refs/heads/master";
 assert.equal(pluginAddSpec("git+https://github.com/yujunzhixue/dsh-purge.git", "master"), masterTar);
 assert.equal(pluginAddSpec("github:yujunzhixue/dsh-purge", "master"), masterTar);
-assert.equal(pluginAddSpec("https://github.com/YuJunZhiXue/dsh-purge/archive/refs/heads/master.zip", "master"), masterTar);
+assert.equal(pluginAddSpec("https://codeload.github.com/YuJunZhiXue/dsh-purge/zip/refs/heads/master", "master"), masterTar);
 assert.equal(pluginAddSpec("dsh-purge", "master"), "");
 
 const head = "9397203733562d6baeec9e38ac519698c619edcb";
