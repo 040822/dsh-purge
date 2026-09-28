@@ -1,3 +1,17 @@
+# 1.1.27
+
+## 中文
+
+- **修复应用重启后进规则设定仍弹「需要重启」**：手动「应用」成功后写入 `applied` 戳，重启后 settle 不再误判补丁未对齐。
+- 点「重启」清掉 `boot_full_quit` 粘性标记；status 按布尔值同步弹窗。
+- web `waitForRestart` 必须先看到旧进程掉线再判定成功，避免同进程误刷新又弹窗。
+
+## English
+
+- **Fix restart prompt still showing after Apply + successful restart**: write the `applied` stamp on successful manual Apply so settle does not think patches are out of date.
+- Clear sticky `boot_full_quit` when Restart is clicked; status syncs the modal from the boolean.
+- Web `waitForRestart` requires the old process to go down before treating restart as success, avoiding same-process false refresh.
+
 # 1.1.26
 
 ## 中文
