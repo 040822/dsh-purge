@@ -1,3 +1,23 @@
+# 1.1.35
+
+## 中文
+
+- 版本升级到 1.1.35。
+- 启动时不再自动更新，要自己在面板里选择。
+- dsh-purge 入口改到「上下文」旁边，不再挡住别的插件按钮。
+- 得分口径对齐上游：25 项，Web 应用增加兜底归类。
+- 知识库 14 类计数包含本机 nuclei 模板，点某一类可以筛选。
+- 技能路径跟随 `$DSH_HOME`，不再因为示例路径在本机不存在就把整条技能标成不可用。
+
+## English
+
+- Version 1.1.35.
+- Startup no longer auto-updates; choose the update in the panel.
+- The dsh-purge entry sits beside Context, so it no longer covers other plugin buttons.
+- Scoring matches upstream: 25 items, with a fallback bucket for other web apps.
+- The 14 knowledge categories count local nuclei templates, and a category filters the list.
+- Skill paths follow `$DSH_HOME`. A skill is no longer marked unavailable just because an example path is missing on this machine.
+
 # 1.1.34
 
 ## 中文

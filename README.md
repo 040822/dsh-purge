@@ -4,7 +4,7 @@
 
 <h1 align="center">⚔️ DeepSeek Harness cybersecurity red-team tool (dsh-purge)</h1>
 
-<p align="center"><strong>Version 1.1.34</strong></p>
+<p align="center"><strong>Version 1.1.35</strong></p>
 
 <p align="center">
   <em>Local official DeepSeek Harness cybersecurity red-team plugin. Clean host policy, and ship a built-in drill console. Swap prompts per model. Default prompt for Chinese models — 小码酱. Please star ⭐</em>
@@ -568,7 +568,7 @@ Plugin config lives in `cordis.patch.yml`:
       config:
         enabled: true
         autoApplyOnStart: true
-        autoUpdateOnStart: true
+        autoUpdateOnStart: false
         autoRevertOnMissing: false
         verbose: false
         postPromptOrder: 5100

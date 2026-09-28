@@ -4,7 +4,7 @@
 
 <h1 align="center">⚔️ DeepSeek Harness 网络安全红队工具（dsh-purge）</h1>
 
-<p align="center"><strong>Version 1.1.34</strong></p>
+<p align="center"><strong>Version 1.1.35</strong></p>
 
 <p align="center">
   <em>本机官方 DeepSeek Harness 网络安全红队评测插件。清洗宿主策略，并带内嵌演练台。不同模型可换不同提示词。默认提示词面向国模「小码酱」。求 Star 收藏 ⭐</em>
@@ -568,7 +568,7 @@ dsh-purge --uninstall
       config:
         enabled: true
         autoApplyOnStart: true
-        autoUpdateOnStart: true
+        autoUpdateOnStart: false
         autoRevertOnMissing: false
         verbose: false
         postPromptOrder: 5100

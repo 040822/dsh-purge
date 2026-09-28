@@ -743,7 +743,7 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 .dshp-dock-body select.dshp-field,.dshp-dock-body .dshp-field.dshp-ver{background:var(--dshp-paper,#2a2926)!important;color:var(--dshp-ink)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;color-scheme:dark}
 .dshp-dock-body .dshp-root[data-theme="white"] select.dshp-field,.dshp-dock-body .dshp-root[data-theme="white"] .dshp-field.dshp-ver{background:#fff!important;color:#1a1916!important;color-scheme:light}
 .dshp-dock-body .dshp-root[data-theme="dusk"] select.dshp-field,.dshp-dock-body .dshp-root[data-theme="dusk"] .dshp-field.dshp-ver{background:#32312d!important;color:#e6e2db!important;color-scheme:dark}
-.dshp-dock-body select.dshp-field option,.dshp-dock-body .dshp-field.dshp-ver option{background:#1c1c1c;color:#f2f2f2}
+.dshp-dock-body select.dshp-field option,.dshp-dock-body .dshp-field.dshp-ver option{background:#fff;color:#1a1916}
 .dshp-dock-body .dshp-root[data-theme="white"] select.dshp-field option,.dshp-dock-body .dshp-root[data-theme="white"] .dshp-field.dshp-ver option{background:#fff;color:#1a1916}
 .dshp-dock-body .dshp-title,.dshp-dock-body .dshp-kicker,.dshp-dock-body .dshp-sub h4,.dshp-dock-body .dshp-group-h strong,.dshp-dock-body .dshp-metric b{color:var(--dshp-ink)}
 .dshp-dock-body .dshp-mute,.dshp-dock-body .dshp-metric span,.dshp-dock-body .dshp-group-h em,.dshp-dock-body .dshp-count,.dshp-dock-body .dshp-rule-meta{color:var(--dshp-mute)}
@@ -840,7 +840,7 @@ body[data-ds-dark-theme] .dshp-dock-body .dshp-switch button.is-on{background:#3
 .dshp-icon-btn{appearance:none;display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 10px;border:1px solid color-mix(in srgb,var(--dsw-alias-brand-primary,#6dbf8c) 45%,transparent);border-radius:8px;background:transparent;color:var(--dsw-alias-label-secondary,currentColor);cursor:pointer;font:13px/1 inherit;white-space:nowrap;flex:0 0 auto}
 .dshp-icon-btn:hover{border-color:var(--dsw-alias-brand-primary,#6dbf8c);background:color-mix(in srgb,var(--dsw-alias-brand-primary,#6dbf8c) 12%,transparent);color:var(--dsw-alias-label-primary,currentColor)}
 .dshp-icon-btn.on{border-color:var(--dsw-alias-brand-primary,#6dbf8c);color:var(--dsw-alias-brand-primary,#6dbf8c);background:color-mix(in srgb,var(--dsw-alias-brand-primary,#6dbf8c) 16%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--dsw-alias-brand-primary,#6dbf8c) 28%,transparent)}
-.dshp-hbtn{appearance:none;display:inline-flex;align-items:center;gap:6px;border:1px solid color-mix(in srgb,var(--dsw-alias-brand-primary,#6dbf8c) 55%,transparent);background:transparent;color:var(--dsw-alias-label-secondary,currentColor);cursor:pointer;font:12px/1 inherit;padding:5px 10px;border-radius:8px}
+.dshp-hbtn{appearance:none;display:inline-flex;flex:0 0 auto;align-items:center;gap:6px;border:1px solid color-mix(in srgb,var(--dsw-alias-brand-primary,#6dbf8c) 55%,transparent);background:transparent;color:var(--dsw-alias-label-secondary,currentColor);cursor:pointer;font:12px/1 inherit;padding:5px 10px;border-radius:8px;white-space:nowrap}
 .dshp-hbtn:hover{border-color:var(--dsw-alias-brand-primary,#6dbf8c);background:color-mix(in srgb,var(--dsw-alias-brand-primary,#6dbf8c) 12%,transparent);color:var(--dsw-alias-label-primary,currentColor)}
 .dshp-hbtn.on{border-color:var(--dsw-alias-brand-primary,#6dbf8c);color:var(--dsw-alias-brand-primary,#6dbf8c);background:color-mix(in srgb,var(--dsw-alias-brand-primary,#6dbf8c) 18%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--dsw-alias-brand-primary,#6dbf8c) 32%,transparent)}
 .dshp-live-dot{width:7px;height:7px;border-radius:50%;flex:none;background:var(--dsw-alias-brand-primary,#6dbf8c);box-shadow:0 0 0 3px color-mix(in srgb,var(--dsw-alias-brand-primary,#6dbf8c) 28%,transparent)}
@@ -848,6 +848,11 @@ body[data-ds-dark-theme] .dshp-dock-body .dshp-switch button.is-on{background:#3
 .dshp-hero-chip-btn{appearance:none;display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border:1px solid color-mix(in srgb,var(--dsw-alias-brand-primary,#6dbf8c) 50%,transparent);border-radius:999px;background:color-mix(in srgb,var(--dsw-alias-brand-primary,#6dbf8c) 10%,transparent);color:var(--dsw-alias-label-primary,currentColor);cursor:pointer;font:12.5px/1 inherit;white-space:nowrap}
 .dshp-hero-chip-btn:hover{border-color:var(--dsw-alias-brand-primary,#6dbf8c);background:color-mix(in srgb,var(--dsw-alias-brand-primary,#6dbf8c) 18%,transparent)}
 .dshp-hero-chip-btn.on{border-color:var(--dsw-alias-brand-primary,#6dbf8c);color:var(--dsw-alias-brand-primary,#6dbf8c);background:color-mix(in srgb,var(--dsw-alias-brand-primary,#6dbf8c) 18%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--dsw-alias-brand-primary,#6dbf8c) 32%,transparent)}
+.dshp-tab-chip{display:inline-flex;align-items:flex-end;flex:0 0 auto}
+.dshp-tab-btn{appearance:none;position:relative;border:none;background:transparent;cursor:pointer;padding:0 0 9px;font:500 13px/16px inherit;color:var(--dsw-alias-label-tertiary,currentColor);white-space:nowrap}
+.dshp-tab-btn:hover{color:var(--dsw-alias-label-primary,currentColor)}
+.dshp-tab-btn.on{color:var(--dsw-alias-brand-primary,#6dbf8c)}
+.dshp-tab-btn.on:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;border-radius:2px;background:var(--dsw-alias-brand-primary,#6dbf8c)}
 `;
 
 		function formatSize(bytes) {
@@ -5214,7 +5219,9 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 
       const stats = (data && data.stats) || { total: 0, verified: 0, reused: 0, byKind: [], bySource: [] }
       const items = (data && data.items) || []
-      const tpl = (data && data.templates) || { dir: null, total: 0, matched: 0, offset: 0, items: [] }
+      const tpl = (data && data.templates) || { dir: null, total: 0, matched: 0, offset: 0, items: [], byCategory: [] }
+      const tplByCat = new Map((tpl.byCategory || []).map((c) => [c.code, c.n || 0]))
+      const catShown = (c) => (c.n || 0) + (tplByCat.get(c.code) || 0)
       const tplItems = tpl.items || []
       const tplMatched = tpl.matched != null ? tpl.matched : tpl.total
       const tplStart = Number(tpl.offset) || 0
@@ -5291,17 +5298,20 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
           h('button', { className: 'rt-btn', disabled: busy, onClick: () => query() }, busy ? '检索中…' : '刷新')),
         /* 归类总览：点一下就是按该类筛选，一眼看清"哪类武器攒了多少、哪类还是空的" */
         h('div', { className: 'rt-kb-cats' },
-          (stats.byCategory || []).filter((c) => c.n > 0 || POC_CAT_ORDER.includes(c.code)).map((c) => h('span', {
+          (stats.byCategory || []).filter((c) => catShown(c) > 0 || POC_CAT_ORDER.includes(c.code)).map((c) => h('span', {
             key: c.code,
             className: 'rt-concl-i' + (category === c.code ? ' on' : ''),
-            title: c.hint || ('筛选：' + (POC_CAT_NAME[c.code] || c.code)),
+            title: (c.hint || POC_CAT_NAME[c.code] || c.code)
+              + ' · 本机模板 ' + (tplByCat.get(c.code) || 0)
+              + ' · 知识库 ' + (c.n || 0)
+              + (c.verified ? '（已验证 ' + c.verified + '）' : ''),
             onClick: () => {
               const next = category === c.code ? '' : c.code
               setCategory(next)
               query({ category: next || undefined })
             },
           },
-            h('b', null, String(c.n || 0)),
+            h('b', null, String(catShown(c))),
             h('span', null, (POC_CAT_NAME[c.code] || c.code) + (c.verified ? '（已验证 ' + c.verified + '）' : ''))))),
         h('div', { className: 'rt-kb-filter' },
           h('input', {
@@ -5366,6 +5376,7 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
                   + '（直接 `nuclei -t <模板路径>`）'),
                 tplItems.map((t, i) => h('div', { key: 't' + tplStart + '-' + i, className: 'rt-kb-tpl-row' },
                   h('span', { className: 'rt-tag' }, t.severity || '—'),
+                  t.category ? h('span', { className: 'rt-tag' }, POC_CAT_NAME[t.category] || t.category) : null,
                   h('span', { className: 'rt-mono rt-kb-tpl-path', title: t.path }, t.path),
                   h('span', { className: 'rt-kb-tpl-name', title: t.name }, t.name || ''),
                   h('button', {
@@ -7590,19 +7601,52 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 			return null;
 		}
 
-		/** 会话中：顶栏右侧显示 dsh-purge，打开插件。 */
-		function SessionHeaderPurge() {
+		/** 挂在「对话 / 轨迹 / 上下文」这一排，紧挨上下文。 */
+		function TabRowPurgeMount() {
 			const t = useT();
 			const st = useDock();
-			return h("button", {
+			const [host, setHost] = useState(null);
+			useEffect(() => {
+				let dead = false;
+				const ensure = () => {
+					if (dead || typeof document === "undefined") return;
+					const row = document.querySelector("[data-conversation-tabs]");
+					if (!row) {
+						setHost((prev) => (prev ? null : prev));
+						return;
+					}
+					let el = row.querySelector(":scope > .dshp-tab-chip");
+					if (!el) {
+						el = document.createElement("div");
+						el.className = "dshp-tab-chip";
+						row.appendChild(el);
+					}
+					setHost((prev) => (prev === el ? prev : el));
+				};
+				ensure();
+				const obs = typeof MutationObserver !== "undefined"
+					? new MutationObserver(() => ensure())
+					: null;
+				if (obs) obs.observe(document.body, { childList: true, subtree: true });
+				const iv = setInterval(ensure, 1000);
+				return () => {
+					dead = true;
+					if (obs) obs.disconnect();
+					clearInterval(iv);
+				};
+			}, []);
+			if (!host) return null;
+			const btn = h("button", {
 				type: "button",
-				className: "dshp-hbtn" + (st.open ? " on" : ""),
+				className: "dshp-tab-btn" + (st.open ? " on" : ""),
 				title: st.open ? (t("dock.inSession") + " · 已开启") : (t("dock.inSession") + " · 点击打开"),
 				onClick: () => toggleDock(),
-			},
-				st.open ? h("span", { className: "dshp-live-dot", "aria-hidden": "true" }) : null,
-				t("dock.inSession"),
-			);
+			}, t("dock.inSession"));
+			try {
+				const rd = require("react-dom");
+				if (rd && typeof rd.createPortal === "function") return rd.createPortal(btn, host);
+			} catch { /* host 可能没暴露 react-dom */ }
+			return null;
 		}
 
 
@@ -7640,13 +7684,7 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 				name: "shell.overlay",
 				id: "dsh-purge-dock",
 				order: 50,
-			}, () => h(react.Fragment, null, h(PurgeDock), h(HeroNewSessionMount), h(EnvAdaptSendGate))));
-			ctx.slots.inject("conversation.session.header.utilities", () => ctx.slots.register({
-				name: "conversation.session.header.utilities",
-				id: "dsh-purge-header",
-				order: 90,
-				label: () => t("dock.inSession"),
-			}, () => h(SessionHeaderPurge)));
+			}, () => h(react.Fragment, null, h(PurgeDock), h(HeroNewSessionMount), h(TabRowPurgeMount), h(EnvAdaptSendGate))));
 			try {
 				if (typeof ctx.inject === "function") {
 					ctx.inject(["sessions", "uiWorkspace", "workspaces", "conversation"], (host) => installRewindUi(host));
