@@ -677,7 +677,7 @@ dsh-purge --edit
 purge_status   purge_apply   purge_revert
 ```
 
-Patched packages load only after a restart. Apply does not restart by itself. Under the patch title, **Stable** and **Beta** are separate: each has its own version list and switch action. A rollback is pinned; click **Update** to return to that channel's tip.
+Patched packages load only after a restart. Apply does not restart by itself. Under the patch title is the stable release: you can see versions and switch. A rollback is pinned; click **Update** to return to the latest. The beta channel is gone.
 
 The composer **Undo** button drops the last turn and puts the last user sentence back in the input. On the main agent you can rewind once or the whole last round (including subagents). After rewind, send only what is in the box now. `/rewind` does the same. The host cannot truncate a session in place, so rewind opens another session for the shortened transcript and removes the old one from the sidebar. Repeating undo does not leave a stack of branches in the list.
 

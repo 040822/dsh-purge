@@ -1522,7 +1522,6 @@ body[data-ds-dark-theme] .dshp-dock-body .dshp-switch button.is-on{background:#3
 					),
 					h("div", { className: "dshp-editions" },
 						renderEdition("stable"),
-						renderEdition("beta"),
 					),
 					noticeNode(updateNotice),
 				),
@@ -1886,14 +1885,12 @@ body[data-ds-dark-theme] .dshp-dock-body .dshp-switch button.is-on{background:#3
 			return best;
 		}
 
-		function keepListedVersion(item, ceiling) {
-			const ver = String((item && (item.version || item.ref)) || "").replace(/^v/i, "");
-			if (/^1\.1\.11-beta/i.test(ver)) return false;
-			if (!item || item.channel !== "beta") return true;
-			// 与 lib/update.hideListedVersion 一致：测试 tip / beta 分支始终可见（并行通道）。
-			if (item.ref === "beta" || item.kind === "head" || item.latest) return true;
-			if (!ceiling) return true;
-			return listedVersionNewer(ver, ceiling);
+		function keepListedVersion(item, _ceiling) {
+			const ver = String((item && (item.version || item.ref || item.id)) || "");
+			if (!item) return false;
+			if (item.channel === "beta" || item.ref === "beta") return false;
+			if (/(?:^|[-._])(beta|rc|pre|preview|test)(?:\d|$|[-._])/i.test(ver)) return false;
+			return true;
 		}
 
 		function preferListed(list, localVer, pin) {

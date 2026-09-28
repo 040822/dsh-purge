@@ -40,18 +40,16 @@ const caughtUp = [
 ];
 const ceiling = latestStableVersion(caughtUp);
 assert.equal(ceiling, "1.1.12");
-assert.equal(hideListedVersion(caughtUp[2], ceiling), true); // 已追上的旧 beta 标签仍隐藏
-assert.equal(hideListedVersion(caughtUp[3], ceiling), false); // beta 分支 tip 始终保留（并行通道）
-assert.equal(hideListedVersion(caughtUp[4], ceiling), false);
+assert.equal(hideListedVersion(caughtUp[2], ceiling), true);
+assert.equal(hideListedVersion(caughtUp[3], ceiling), true);
+assert.equal(hideListedVersion(caughtUp[4], ceiling), true);
 assert.equal(hideListedVersion({ ref: "v1.1.11-beta.1", version: "1.1.11-beta.1", channel: "beta" }, ""), true);
 
 const visible = caughtUp.filter((item) => !hideListedVersion(item, ceiling));
-assert.deepEqual(visible.map((item) => item.ref), ["master", "v1.1.12", "beta", "v1.1.13-beta.1"]);
+assert.deepEqual(visible.map((item) => item.ref), ["master", "v1.1.12"]);
 const staleSha = "423a91614baa747b56749003d054fedb8e725714";
 const shown = markCurrent(visible, { channel: "stable", pin: "" }, "1.1.12", staleSha);
 assert.equal(shown.find((item) => item.ref === "master").current, true);
 assert.equal(shown.find((item) => item.ref === "v1.1.12").current, false);
-assert.equal(shown.find((item) => item.ref === "beta").current, false);
-assert.equal(shown.find((item) => item.ref === "v1.1.13-beta.1").current, false);
 
 console.log("ok: update guards");
