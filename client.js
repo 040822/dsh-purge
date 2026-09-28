@@ -766,7 +766,9 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 .dshp-dock-body .rt-dock{position:relative;inset:auto;width:100%!important;height:100%;max-width:none!important;flex:1;min-height:0;min-width:0;display:flex!important;flex-direction:column;box-shadow:none;border:0;transform:none!important;opacity:1!important;pointer-events:auto!important;background:transparent!important;color:#f4f2ec;font-size:13.5px;line-height:1.55;font-weight:450;--rt-ink:#f4f2ec;--rt-mute:#d2ccc0;--rt-surf:color-mix(in srgb,#0c0c0c 42%,transparent);--rt-surf-2:color-mix(in srgb,#0c0c0c 55%,transparent);--rt-line:color-mix(in srgb,#fff 22%,transparent)}
 .dshp-dock-body .rt-grip{display:none!important}
 .dshp-dock-body .rt-embedded>.rt-head,.dshp-dock-body .rt-tabs,.dshp-dock-body .rt-foot{flex:none;background:color-mix(in srgb,#0c0c0c 28%,transparent)!important;color:var(--rt-ink);border-color:var(--rt-line)}
-.dshp-dock-body .rt-body{flex:1;min-height:0;overflow:auto!important;background:transparent!important;color:var(--rt-ink)}
+.dshp-dock-body .rt-body{flex:1;min-height:0;overflow:hidden!important;background:transparent!important;color:var(--rt-ink)}
+.dshp-dock-body .rt-main{min-height:0;flex:1;overflow:hidden}
+.dshp-dock-body .rt-pane{min-height:0;overflow:auto!important}
 .dshp-dock-body .rt-card,.dshp-dock-body .rt-pane,.dshp-dock-body .rt-side,.dshp-dock-body .rt-main,.dshp-dock-body .rt-list,.dshp-dock-body .rt-toolbar,.dshp-dock-body .rt-evi,.dshp-dock-body .rt-live-body,.dshp-dock-body .rt-chain,.dshp-dock-body .rt-split,.dshp-dock-body .rt-table{background:var(--rt-surf)!important;color:var(--rt-ink)!important;border:1px solid var(--rt-line);backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2)}
 .dshp-dock-body .rt-title,.dshp-dock-body .rt-tab.on,.dshp-dock-body .rt-card h4,.dshp-dock-body .rt-kv b,.dshp-dock-body .rt-mono,.dshp-dock-body .rt-row,.dshp-dock-body .rt-item,.dshp-dock-body .rt-item-name,.dshp-dock-body .rt-seg-cidr,.dshp-dock-body .rt-vrow,.dshp-dock-body .rt-score-row,.dshp-dock-body h4,.dshp-dock-body .rt-link,.dshp-dock-body .rt-toolbar>span{color:var(--rt-ink)!important;text-shadow:none;font-weight:600}
 .dshp-dock-body .rt-tab,.dshp-dock-body .rt-foot,.dshp-dock-body .rt-empty,.dshp-dock-body .rt-item-desc,.dshp-dock-body .rt-kb-sub,.dshp-dock-body .rt-seg-meta,.dshp-dock-body .rt-expand,.dshp-dock-body .rt-kv span,.dshp-dock-body .rt-tag,.dshp-dock-body .rt-sess-fact>b,.dshp-dock-body .rt-sess-cmd>b,.dshp-dock-body .rt-sess-fold>summary,.dshp-dock-body .rt-score-group .rt-sg-sub,.dshp-dock-body .rt-scope,.dshp-dock-body .rt-flow-action,.dshp-dock-body .rt-sec-sub{color:var(--rt-mute)!important;text-shadow:none;opacity:1!important}
@@ -2999,7 +3001,7 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 .rt-body{flex:1;min-height:0;display:flex;flex-direction:column}
 .rt-split{flex:1;min-height:0;display:flex}
 .rt-side{width:200px;flex:none;border-right:1px solid var(--dsw-alias-border-l1);overflow:auto;padding:8px}
-.rt-main{flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden}
+.rt-main{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;overflow:hidden}
 .rt-seg{padding:7px 8px;border-radius:6px;cursor:pointer;margin-bottom:4px;border:1px solid transparent}
 .rt-seg:hover{background:var(--dsw-alias-bg-layer-2)}
 .rt-seg.on{background:var(--dsw-alias-bg-layer-2);border-color:var(--dsw-alias-brand-primary)}
@@ -3034,7 +3036,7 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 .rt-kv{display:flex;gap:8px;margin-bottom:3px;align-items:baseline}
 .rt-kv b{color:var(--dsw-alias-label-primary);font-weight:600;min-width:64px;flex:none}
 /* 图谱视图已移除（见 AssetsTab：资产关系由「域名维度」与 redteam_attack_path 工具承担） */
-.rt-pane{flex:1;overflow:auto;padding:12px}
+.rt-pane{flex:1;min-height:0;overflow:auto;padding:12px}
 .rt-card{border:1px solid var(--dsw-alias-border-l1);border-radius:8px;padding:10px;margin-bottom:10px;background:var(--dsw-alias-bg-layer-2)}
 .rt-card h4{margin:0 0 6px;font-size:13px}
 .rt-textarea{width:100%;min-height:260px;background:var(--dsw-alias-bg-base);border:1px solid var(--dsw-alias-border-l1);
@@ -5528,12 +5530,13 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
           h('div', { className: 'rt-spacer' }),
           h('button', { className: 'rt-btn', disabled: busy, onClick: load }, busy ? '读取中…' : '刷新'),
           h('button', { className: 'rt-btn rt-btn-primary', disabled: busy || !draft, onClick: save }, '保存')),
+        h('div', { className: 'rt-pane', style: { minHeight: 0 } },
         err ? h('div', { className: 'rt-err' }, err) : null,
         msg ? h('div', { className: msg.err ? 'rt-err' : 'rt-foot' }, msg.err || msg.ok) : null,
-        h('div', { className: 'rt-card', style: { margin: '8px 12px', fontSize: 12, lineHeight: 1.6 } },
+        h('div', { className: 'rt-card', style: { margin: '0 0 8px', fontSize: 12, lineHeight: 1.6 } },
           adapt.message
             || '均可选填：留空则用默认路径/自动查找。填了的覆盖默认。密钥类只在需要测绘/反弹时才填。'),
-        h('div', { className: 'rt-card', style: { margin: '8px 12px', fontSize: 12, lineHeight: 1.6 } },
+        h('div', { className: 'rt-card', style: { margin: '0 0 8px', fontSize: 12, lineHeight: 1.6 } },
           h('div', { style: { fontWeight: 600, marginBottom: 6 } }, '整包文件夹 → 自动分配工具'),
           h('div', { style: { marginBottom: 8, opacity: 0.9 } },
             '工具都在同一个文件夹（含子目录）时，填路径后点「自动分配」：会写入 toolkitDir，并按文件名匹配 nmap / nuclei / fscan 等填到下方。'),
@@ -5549,15 +5552,15 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
               className: 'rt-btn rt-btn-primary', disabled: busy,
               onClick: assignFolder,
             }, busy ? '扫描中…' : '自动分配'))),
-        data && data.hint ? h('div', { className: 'rt-card', style: { margin: '8px 12px', fontSize: 12, lineHeight: 1.6 } }, data.hint) : null,
-        data && data.egress ? h('div', { className: 'rt-card', style: { margin: '8px 12px', fontSize: 12, lineHeight: 1.55 } },
+        data && data.hint ? h('div', { className: 'rt-card', style: { margin: '0 0 8px', fontSize: 12, lineHeight: 1.6 } }, data.hint) : null,
+        data && data.egress ? h('div', { className: 'rt-card', style: { margin: '0 0 8px', fontSize: 12, lineHeight: 1.55 } },
           h('div', { style: { fontWeight: 600, marginBottom: 6 } }, '出网状态（借鉴 Z3r0 egress，只读）'),
           h('div', { className: 'rt-mono', style: { fontSize: 11 } }, 'HTTP_PROXY=' + (data.egress.http_proxy || '(空)')),
           h('div', { className: 'rt-mono', style: { fontSize: 11 } }, 'HTTPS_PROXY=' + (data.egress.https_proxy || '(空)')),
           h('div', { className: 'rt-mono', style: { fontSize: 11 } }, 'ALL_PROXY=' + (data.egress.all_proxy || '(空)')),
           h('div', { className: 'rt-mono', style: { fontSize: 11 } }, 'NO_PROXY=' + (data.egress.no_proxy || '(空)')),
           h('div', { style: { marginTop: 6, opacity: 0.85 } }, data.egress.note || '')) : null,
-        !draft ? h('div', { className: 'rt-empty' }, '加载中…') : h('div', { className: 'rt-pane' },
+        !draft ? h('div', { className: 'rt-empty' }, '加载中…') : h('div', null,
           h('div', { className: 'rt-card' },
             h('h4', null, '平台与目录'),
             h('div', { style: { display: 'grid', gap: 8 } },
@@ -5630,7 +5633,7 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
           h('div', { className: 'rt-foot' },
             h('span', null,
               '配置文件：' + ((data && data.config && data.config.path) || '$DSH_HOME/redteam/config.json')
-              + ' | 留空字段全部走默认'))))
+              + ' | 留空字段全部走默认')))))
     }
 
     /* ---------------------------------------------------------- 得分目标 */

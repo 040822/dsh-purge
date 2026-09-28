@@ -1,3 +1,15 @@
+# 1.1.37
+
+## 中文
+
+- 版本升级到 1.1.37。
+- 修改演示台环境配置滚动问题。
+
+## English
+
+- Version 1.1.37.
+- The drill console environment page scrolls, so the rest of the settings can be filled in.
+
 # 1.1.36
 
 ## 中文
