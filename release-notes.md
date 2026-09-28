@@ -1,21 +1,3 @@
-# 1.1.29
-
-## 中文
-
-- **修复选版本/重装后无限重启**：`dsh plugin add --force` 会先杀掉宿主，若 `installed-rev` 写在后面，下次启动又判定要更新，形成死循环。
-- 自动更新改为**只跟版本号**，不再因 master SHA 漂移反复安装；更新前先写 stamp，并加 15 分钟冷却。
-- 默认关闭 `autoUpdateOnStart`（可在配置里手动打开）。
-- **修复更新仍报 `http 302`**：下载改用 Node `https`，`github.com/archive` 即使没有 Location 也改写成 `codeload`，不再走宿主 fetch。
-- **修复切换版本后仍显示旧版本**：钉住的标签只标那一条为当前。
-
-## English
-
-- **Fix infinite restart after switching versions / reinstall**: `dsh plugin add --force` can kill the host before `installed-rev` is written, so the next boot thinks an update is still needed.
-- Auto-update follows **version numbers only** (not floating master SHA); write the stamp before install and add a 15-minute cooldown.
-- `autoUpdateOnStart` defaults to off (can still be enabled in config).
-- **Fix update still failing with `http 302`**: download via Node `https`, and rewrite `github.com/archive` to `codeload` even when Location is missing.
-- **Fix switch still showing the old version**: a pinned tag is the only row marked current.
-
 # 1.1.28
 
 ## 中文

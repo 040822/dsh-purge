@@ -892,7 +892,7 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 				const next = { stable: "", beta: "" };
 				for (const id of ["stable", "beta"]) {
 					const list = versions.filter((item) => item.channel === id && keepListedVersion(item, ceiling));
-					const hit = preferListed(list, d && d.localVersion, d && d.pin);
+					const hit = preferListed(list, d && d.localVersion);
 					next[id] = (hit && hit.ref) || "";
 				}
 				setPick(next);
@@ -1279,7 +1279,7 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 				const ceiling = listedCeiling(versions, localVer || (updateInfo && updateInfo.localVersion));
 				const list = versions.filter((item) => item.channel === id && keepListedVersion(item, ceiling));
 				const selectedRef = pick[id] || "";
-				const hit = list.find((item) => item.ref === selectedRef) || preferListed(list, localVer, updateInfo && updateInfo.pin);
+				const hit = list.find((item) => item.ref === selectedRef) || preferListed(list, localVer);
 				const onLane = channelNow === id;
 				const noBeta = id === "beta" && Array.isArray(updateInfo && updateInfo.versions) && !list.length;
 				const pickedOther = Boolean(hit && selectedRef && !hit.current);
@@ -1721,9 +1721,7 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 			return listedVersionNewer(ver, ceiling);
 		}
 
-		function preferListed(list, localVer, pin) {
-			const pinned = pin ? (list || []).find((item) => item.ref === pin) : null;
-			if (pinned) return pinned;
+		function preferListed(list, localVer) {
 			const ver = String(localVer || "").replace(/^v/i, "");
 			return (list || []).find((item) => item.current)
 				|| (list || []).find((item) => ver && String(item.version || "").replace(/^v/i, "") === ver)
