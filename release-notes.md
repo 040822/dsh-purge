@@ -1,3 +1,17 @@
+# 1.1.30
+
+## 中文
+
+- 版本升级到 1.1.30。
+- **修复正式版和 web 切换版本失败**：不再用 `dsh plugin add` 拉包。pnpm 请求 GitHub 压缩包会 `http 302` 或 `fetch failed`。改由插件自己下载。
+- **修复思考和输出死循环**：去掉默认提示词里没有终止条件的重置。
+
+## English
+
+- Version 1.1.30.
+- **Fix version switching on the desktop app and web**: stop installing through `dsh plugin add`. pnpm's fetch of the GitHub archive returns `http 302` or `fetch failed`. The plugin downloads the package itself.
+- **Fix the thinking and output loop**: remove the default-prompt reset that had no stop condition.
+
 # 1.1.28
 
 ## 中文
