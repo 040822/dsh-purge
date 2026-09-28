@@ -5164,8 +5164,13 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
       const [openId, setOpenId] = React.useState(null)
       const [detail, setDetail] = React.useState(null)
       const [detailBusy, setDetailBusy] = React.useState(false)
+      const [tplOffset, setTplOffset] = React.useState(0)
+      const tplPageSize = 40
 
       const query = (over) => {
+        const extra = over || {}
+        const offset = Object.prototype.hasOwnProperty.call(extra, 'templateOffset') ? extra.templateOffset : 0
+        setTplOffset(offset)
         const params = Object.assign({
           q: q.trim() || undefined,
           kind: kind || undefined,
@@ -5173,7 +5178,9 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
           engagement: engagement || undefined,
           asset_target: assetTarget.trim() || undefined,
           verified: verifiedOnly || undefined,
-        }, over || {})
+          templateOffset: offset || 0,
+          templateLimit: tplPageSize,
+        }, extra)
         setBusy(true); setMsg(null)
         api(Object.assign({ op: 'pocSearch' }, params)).then((r) => {
           setBusy(false)
@@ -5207,8 +5214,15 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 
       const stats = (data && data.stats) || { total: 0, verified: 0, reused: 0, byKind: [], bySource: [] }
       const items = (data && data.items) || []
-      const tpl = (data && data.templates) || { dir: null, total: 0, items: [] }
+      const tpl = (data && data.templates) || { dir: null, total: 0, matched: 0, offset: 0, items: [] }
       const tplItems = tpl.items || []
+      const tplMatched = tpl.matched != null ? tpl.matched : tpl.total
+      const tplStart = Number(tpl.offset) || 0
+      const turnTpl = (next) => {
+        const offset = Math.max(0, next)
+        setTplOffset(offset)
+        query({ templateOffset: offset })
+      }
 
       const card = (x) => {
         const isOpen = openId === x.id
@@ -5348,8 +5362,9 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
           tplItems.length
             ? h('div', { className: 'rt-kb-tpl' },
                 h('div', { className: 'rt-ap-sub' },
-                  '本机 nuclei 模板命中 · ' + tplItems.length + ' 条（直接 `nuclei -t <模板路径>`）'),
-                tplItems.map((t, i) => h('div', { key: 't' + i, className: 'rt-kb-tpl-row' },
+                  '本机 nuclei 模板 · ' + (tplStart + 1) + '–' + (tplStart + tplItems.length) + ' / ' + tplMatched
+                  + '（直接 `nuclei -t <模板路径>`）'),
+                tplItems.map((t, i) => h('div', { key: 't' + tplStart + '-' + i, className: 'rt-kb-tpl-row' },
                   h('span', { className: 'rt-tag' }, t.severity || '—'),
                   h('span', { className: 'rt-mono rt-kb-tpl-path', title: t.path }, t.path),
                   h('span', { className: 'rt-kb-tpl-name', title: t.name }, t.name || ''),
@@ -5357,6 +5372,15 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
                     className: 'rt-btn', style: { padding: '0 6px', fontSize: 10.5 },
                     onClick: () => copy('nuclei -t ' + t.path + ' -u <目标>', '模板命令'),
                   }, '复制命令'))),
+                h('div', { className: 'rt-kb-actions' },
+                  h('button', {
+                    className: 'rt-btn', disabled: busy || tplStart <= 0,
+                    onClick: () => turnTpl(tplStart - tplPageSize),
+                  }, '上一页'),
+                  h('button', {
+                    className: 'rt-btn', disabled: busy || tplStart + tplItems.length >= tplMatched,
+                    onClick: () => turnTpl(tplStart + tplPageSize),
+                  }, '下一页')),
                 tpl.dir ? h('div', { className: 'rt-foot' }, h('span', null, '模板目录：' + tpl.dir)) : null)
             : null,
           data === null ? h('div', { className: 'rt-empty' }, '加载中…') : null,
@@ -5366,7 +5390,7 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
                   q || kind || verifiedOnly
                     ? '没有命中：换个关键字再试，或去互联网找 / 自己手搓后回填。'
                     : (tpl.total
-                      ? ('POC/EXP 库还是空的；本机已有 ' + tpl.total + ' 个 nuclei 模板 —— 在上方搜 CVE / 组件即可命中。')
+                      ? ('POC/EXP 库还是空的；本机已有 ' + tpl.total + ' 个 nuclei 模板，但这一页没有列出来。请完全退出后重新打开客户端。')
                       : (tpl.dir
                         ? '知识库还是空的（本机模板目录存在但没有 yaml，请跑 nuclei -update-templates）。'
                         : '知识库还是空的。本机也还没有 nuclei 模板库 —— 在演练机上跑 setup.sh 或 `nuclei -update-templates`，装好后这里会出现「本机模板 N」。'))),

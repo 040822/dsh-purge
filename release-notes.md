@@ -1,3 +1,17 @@
+# 1.1.34
+
+## 中文
+
+- 版本升级到 1.1.34。
+- **演练台知识库直接列出本机模板**。打开「知识库 · POC / EXP」就能看到一页 nuclei 模板，并可以翻页、按 CVE 或组件搜索。不再只显示「本机模板 N」、下面是空的。
+- **更新包在 Windows、macOS、Linux 上都能解压**。Linux 不再调用 PowerShell。顺序是：Windows 用 tar，不行再用 PowerShell；macOS 和 Linux 用 tar、unzip、python3、bsdtar。这些都没有时，用 Node 自己解 zip。感谢 @cracer4869 在 #44 报出 Kali 上的 `spawnSync powershell ENOENT`。
+
+## English
+
+- Version 1.1.34.
+- **The drill knowledge page lists local templates.** Opening Knowledge shows a page of nuclei templates, with paging and search by CVE or component. It no longer shows only the template count.
+- **Update archives extract on Windows, macOS, and Linux.** Linux does not call PowerShell. Windows tries tar, then PowerShell. macOS and Linux try tar, unzip, python3, then bsdtar. If none of those exist, Node extracts the zip itself. Thanks to @cracer4869 for reporting `spawnSync powershell ENOENT` on Kali in #44.
+
 # 1.1.33
 
 ## 中文
