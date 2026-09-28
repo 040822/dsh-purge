@@ -1031,7 +1031,7 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 							setState(d);
 							if (d.channel) setChannel(d.channel);
 							if (d.update && d.update.ok && !d.update.error) setUpdateInfo(d.update);
-							if (d.boot_full_quit) setAskOfficialRestart(true);
+							setAskOfficialRestart(Boolean(d.boot_full_quit));
 						} else {
 							setState({ ok: false, patches_total: 0, patches_applied: 0, patch_status: {}, shim_cmd: "n/a", shim_ps1: "n/a", shim_bin: "n/a", has_backup: false });
 							setNotice({ kind: "error", text: tr("err.status", { error: (d && d.error) || "bad response" }) });
@@ -2031,14 +2031,23 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 
 		function waitForRestart(setNotice, setBusy, t) {
 			const started = Date.now();
+			// 必须先看到旧进程掉线，再等新进程就绪；否则同进程立刻 200 会被当成「重启成功」又弹重启。
+			let sawDown = false;
 			const ping = () => {
 				fetch("/dsh-purge/status", { cache: "no-store", credentials: "same-origin" })
 					.then((r) => (r.ok ? r.json() : Promise.reject()))
 					.then((d) => {
+						if (!sawDown) {
+							retry();
+							return;
+						}
 						if (d && d.ok && d.ready !== false) reopenAfterRestart();
 						else retry();
 					})
-					.catch(retry);
+					.catch(() => {
+						sawDown = true;
+						retry();
+					});
 			};
 			const retry = () => {
 				if (Date.now() - started > 90000) {
