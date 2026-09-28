@@ -1,3 +1,17 @@
+# 1.1.31
+
+## 中文
+
+- 版本升级到 1.1.31。
+- **演练台进入正式版**。右侧栏两页：清洗、演练台。第一次进入演练台要读声明并确认授权。资产、技能和本机环境都在本插件里，不再单独装测试版红队包。
+- **修复回退堆分支**：宿主不能在原会话里截断，回退后会把旧会话从侧边栏移出，多退几次不会留下一串分支。
+
+## English
+
+- Version 1.1.31.
+- **Drill console is on the stable release.** The right dock has two pages: Clean and Drill. The first time you open Drill you read the notice and confirm authorization. Assets, skills, and the local environment ship inside this plugin.
+- **Fix rewind leaving a branch every time.** The host cannot truncate a session in place. After rewind the old session leaves the sidebar, so repeated undo does not pile up branches.
+
 # 1.1.30
 
 ## 中文

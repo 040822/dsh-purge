@@ -4,10 +4,10 @@
 
 <h1 align="center">⚔️ DeepSeek Harness cybersecurity red-team tool (dsh-purge)</h1>
 
-<p align="center"><strong>Version 1.1.22</strong></p>
+<p align="center"><strong>Version 1.1.31</strong></p>
 
 <p align="center">
-  <em>Local official DeepSeek Harness cybersecurity red-team plugin. Evaluate and adjust host safety policy on a controlled local install; swap prompts per model. Default prompt for Chinese models — 小码酱. Please star ⭐</em>
+  <em>Local official DeepSeek Harness cybersecurity red-team plugin. Clean host policy, and ship a built-in drill console. Swap prompts per model. Default prompt for Chinese models — 小码酱. Please star ⭐</em>
 </p>
 
 <p align="center">
@@ -51,7 +51,9 @@ Harness does more than forward a prompt. It rewrites prompts, approval gates, sa
 
 | You get | What it does |
 |---|---|
-| **Rules** | Grouped patch status, Apply / Restore / Uninstall, prompt editor, multiple rule sets |
+| **dsh-purge dock** | A button beside the session title opens the right dock. Two pages: Clean and Drill |
+| **Clean** | Grouped patch status, Apply / Restore / Uninstall, prompt editor, multiple rule sets |
+| **Drill** | Built into the stable release. After authorization: assets, skills, and the local environment. Only for a host you manage, an offline target, or a written authorized exercise |
 | **Host policy** | Default copy, permission policy, and tool limits. Official capabilities stay. No second invented identity |
 | **On start** | Checks and reapplies. After npm overwrites `node_modules`, you do not hand-edit files |
 
@@ -118,7 +120,7 @@ If `dsh` is not on PATH, or you do not want a remote install, use [Manual instal
 Adding the plugin to a profile does **not** patch `@deepseek-ai` by itself.
 
 1. **Quit and reopen** the host you just installed into. Stop `dsh web` and start it again, or quit the Desktop tray and open that app's exe.
-2. On **that host's** Settings page, wait until **Rules** appears, then click **Apply**. Ctrl+F5 if the page is cached.
+2. On **that host's** Settings page, wait until **dsh-purge** appears, then click **Apply**. Ctrl+F5 if the page is cached. The same button also sits beside the session title.
 3. **Restart once more** when prompted. Patched files load on that next start. Restart happens only when you click it.
 
 Web **Apply / Restart / Uninstall** affect Web only. Desktop controls affect the desktop app only and do not launch `dsh web`. Do not Apply one host from the other.
@@ -262,7 +264,7 @@ On the official desktop, click **Apply**, then restart.
 
 ### How to tell it installed
 
-- Settings shows the **Rules** card
+- Settings shows the **dsh-purge** card
 - `/purge status` in chat prints `DSH_HOME` and the patch list; the path should be the home you are actually running
 - Optional packages that are not installed (liangshen) show as skipped and do not block Apply
 
@@ -535,13 +537,13 @@ Common failures:
 Writing `package.json` does **not** patch `@deepseek-ai` by itself. Restart, then click **Apply**.
 
 1. Fully quit the host you just installed into: stop `dsh web`; quit the community Desktop tray and open `DSH Desktop.exe`; quit the official EXE tray as well
-2. Open **that host’s** Settings page. **Rules** should appear. Ctrl+F5 if cached
+2. Open **that host’s** Settings page. **dsh-purge** should appear. Ctrl+F5 if cached
 3. Click **Apply** on this host only, or run `/purge apply` in chat. Do not Apply Web from Desktop or Desktop from Web
 4. Restart again when prompted so patched packages load in this process. Settings **Restart / Uninstall** relaunch the desktop app; they do not launch `dsh web`
 
 **6. How to confirm it is installed**
 
-- Settings shows the **Rules** card
+- Settings shows the **dsh-purge** card
 - `/purge status` prints `DSH_HOME` and the patch list; the path should match step 1
 - `profiles/<name>/node_modules/dsh-purge` points at `plugins/dsh-purge`
 
@@ -549,7 +551,7 @@ If the card is missing, you likely edited the other `.dsh`, or you edited `web` 
 
 ### Uninstall
 
-Settings → **Rules** → **Uninstall**. Confirm the dialog: uninstall restores the original Harness and removes this plugin. If patches were applied, they are reverted first. The current host then restarts (Web relaunches `dsh web`; community Desktop relaunches `DSH Desktop.exe`).
+Settings → **dsh-purge** → **Uninstall**. Confirm the dialog: uninstall restores the original Harness and removes this plugin. If patches were applied, they are reverted first. The current host then restarts (Web relaunches `dsh web`; community Desktop relaunches `DSH Desktop.exe`).
 
 ```sh
 # or from a terminal
@@ -579,7 +581,21 @@ Plugin config lives in `cordis.patch.yml`:
 
 ## Preview
 
-The **Rules** card appears on the dsh web settings page. Switch **Light / Ink**. Patches are grouped; the count only includes items that actually applied. Rule sets sit in a list above the editor, with Enable and Delete on each row.
+**dsh-purge** sits beside the session title. It opens a right-hand dock with two pages: **Clean** and **Drill**. Switch **Light / Ink**. Patches are grouped; the count only includes items that actually applied. Rule sets sit in a list above the editor, with Enable and Delete on each row.
+
+The first time you open Drill you read the notice, wait out the countdown, scroll to the end, and check three boxes. Clean does not need that step. Drill is only for a host you manage, an offline target, or an exercise that already has written authorization.
+
+**Clean**
+
+![Clean](docs/preview/dock-clean.png)
+
+**Drill authorization**
+
+![Drill authorization](docs/preview/dock-auth.png)
+
+**Drill**
+
+![Drill](docs/preview/dock-drill.png)
 
 **Patches**
 
@@ -591,6 +607,9 @@ The **Rules** card appears on the dsh web settings page. Switch **Light / Ink**.
 
 | Area | What it shows |
 |---|---|
+| dsh-purge | button beside the session title; opens or collapses the dock |
+| Clean | the old Rules page: patches, prompt, rule sets, skills |
+| Drill | assets, skills, and environment after authorization. The tab says Unauthorized until then |
 | Light / Ink | card appearance |
 | Patches | grouped status, Apply, Restore, or Uninstall |
 | Prompt | edit `prompt-inject.md` as the session override |
@@ -609,9 +628,13 @@ dsh-purge/
 ├── docs/
 │   ├── banner.svg
 │   └── preview/
+│       ├── dock-auth.png
+│       ├── dock-clean.png
+│       ├── dock-drill.png
 │       ├── rules.png
 │       └── settings.png
 ├── lib/
+│   ├── redteam/
 │   ├── child-process-hide.mjs
 │   ├── core.js
 │   ├── hide-console.js
@@ -624,6 +647,8 @@ dsh-purge/
 │   ├── uninstall-restart.js
 │   ├── uninstall.js
 │   └── update.js
+├── presets/redteam/
+├── skills/redteam/
 ├── package.json
 ├── screenshots.json
 ├── LICENSE
@@ -654,7 +679,7 @@ purge_status   purge_apply   purge_revert
 
 Patched packages load only after a restart. Apply does not restart by itself. Under the patch title, **Stable** and **Beta** are separate: each has its own version list and switch action. A rollback is pinned; click **Update** to return to that channel's tip.
 
-The composer **Undo** button drops the last turn and puts the last user sentence back in the input. On the main agent you can rewind once or the whole last round (including subagents). After rewind, send only what is in the box now. `/rewind` does the same.
+The composer **Undo** button drops the last turn and puts the last user sentence back in the input. On the main agent you can rewind once or the whole last round (including subagents). After rewind, send only what is in the box now. `/rewind` does the same. The host cannot truncate a session in place, so rewind opens another session for the shortened transcript and removes the old one from the sidebar. Repeating undo does not leave a stack of branches in the list.
 
 ---
 
