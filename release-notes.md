@@ -1,3 +1,15 @@
+# 1.1.33
+
+## 中文
+
+- 版本升级到 1.1.33。
+- **修复已经重启后，打开面板仍弹出「需要重启」**。官方客户端已经从解开的 `resources/app` 运行时，不再仅因为当前是官方进程就再要求退出一次。只有这次真的挪开了 `app.asar`，才会提示重启。
+
+## English
+
+- Version 1.1.33.
+- **Fix the restart dialog coming back after you already restarted.** When the official app is already running from the unpacked `resources/app`, opening the panel no longer asks you to quit again just because this is the official process. The restart prompt appears only when `app.asar` was actually moved aside in this run.
+
 # 1.1.32
 
 ## 中文
