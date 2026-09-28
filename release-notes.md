@@ -1,3 +1,15 @@
+# 1.1.36
+
+## 中文
+
+- 版本升级到 1.1.36。
+- 解决红队模式拒绝问题。
+
+## English
+
+- Version 1.1.36.
+- Fix red team mode refusing the cleaned prompt.
+
 # 1.1.35
 
 ## 中文
