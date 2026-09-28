@@ -1,3 +1,17 @@
+# 1.1.32
+
+## 中文
+
+- 版本升级到 1.1.32。
+- **按测试版接上演练台布局**：面板可拖动、可改大小，浅色和深色跟宿主主题走。
+- **设置页不再出现本插件**。从会话标题旁的 dsh-purge 打开右侧栏，清洗和演练台都在里面。
+
+## English
+
+- Version 1.1.32.
+- **Bring the beta dock layout onto stable**: the panel can be dragged and resized, and light and dark follow the host theme.
+- **The plugin no longer appears on the Settings page.** Open the right dock from dsh-purge beside the session title. Clean and Drill are both in that dock.
+
 # 1.1.31
 
 ## 中文

@@ -4,7 +4,7 @@
 
 <h1 align="center">⚔️ DeepSeek Harness cybersecurity red-team tool (dsh-purge)</h1>
 
-<p align="center"><strong>Version 1.1.31</strong></p>
+<p align="center"><strong>Version 1.1.32</strong></p>
 
 <p align="center">
   <em>Local official DeepSeek Harness cybersecurity red-team plugin. Clean host policy, and ship a built-in drill console. Swap prompts per model. Default prompt for Chinese models — 小码酱. Please star ⭐</em>
@@ -57,7 +57,7 @@ Harness does more than forward a prompt. It rewrites prompts, approval gates, sa
 | **Host policy** | Default copy, permission policy, and tool limits. Official capabilities stay. No second invented identity |
 | **On start** | Checks and reapplies. After npm overwrites `node_modules`, you do not hand-edit files |
 
-No hardcoded drive letters. It looks at `$DSH_HOME`, `.dsh` next to the dsh launcher, then `~/.dsh`. It does not patch the Harness source tree. **Apply** on the settings page is what writes the changes. Identity comes only from your `prompt-inject.md`.
+No hardcoded drive letters. It looks at `$DSH_HOME`, `.dsh` next to the dsh launcher, then `~/.dsh`. It does not patch the Harness source tree. **Apply** on the **Clean** page of **dsh-purge** is what writes the changes. Identity comes only from your `prompt-inject.md`.
 
 It only touches the official `@deepseek-ai` packages and local config on the user's machine. It is not a public scanner and not an attack kit for third-party sites. The repo does not ship malware, unauthorized-exploit scripts, or payloads aimed at the public internet.
 
@@ -120,7 +120,7 @@ If `dsh` is not on PATH, or you do not want a remote install, use [Manual instal
 Adding the plugin to a profile does **not** patch `@deepseek-ai` by itself.
 
 1. **Quit and reopen** the host you just installed into. Stop `dsh web` and start it again, or quit the Desktop tray and open that app's exe.
-2. On **that host's** Settings page, wait until **dsh-purge** appears, then click **Apply**. Ctrl+F5 if the page is cached. The same button also sits beside the session title.
+2. On **that host**, click **dsh-purge** beside the session title, then click **Apply** on the **Clean** page. This plugin does not appear on the host Settings page.
 3. **Restart once more** when prompted. Patched files load on that next start. Restart happens only when you click it.
 
 Web **Apply / Restart / Uninstall** affect Web only. Desktop controls affect the desktop app only and do not launch `dsh web`. Do not Apply one host from the other.
@@ -141,7 +141,7 @@ If this directory is already a clone:
 dsh plugin --profile web add .
 ```
 
-Then follow the three steps above and click **Apply** on the **Web** Settings page.
+Then follow the three steps above. Click **dsh-purge** beside the session title and **Apply** on **Clean**.
 
 <a id="desktop"></a>
 
@@ -155,7 +155,7 @@ dsh plugin add https://github.com/YuJunZhiXue/dsh-purge/archive/refs/heads/maste
 
 Do not use official `dsh plugin --profile desktop` on PATH (it is rejected). Do not use `dsh://` (that protocol belongs to the official EXE).
 
-Then quit the tray, reopen `DSH Desktop.exe`, and click **Apply** on the **desktop** Settings page.
+Then quit the tray, reopen `DSH Desktop.exe`, click **dsh-purge** beside the session title, and **Apply** on **Clean**.
 
 For a custom install folder, set `$exe` in the script to `DSH Desktop.exe` in that folder. The tarball URL is the source so a local path with spaces cannot split the command.
 
@@ -264,7 +264,7 @@ On the official desktop, click **Apply**, then restart.
 
 ### How to tell it installed
 
-- Settings shows the **dsh-purge** card
+- **dsh-purge** sits beside the session title, and **Apply** is on its Clean page
 - `/purge status` in chat prints `DSH_HOME` and the patch list; the path should be the home you are actually running
 - Optional packages that are not installed (liangshen) show as skipped and do not block Apply
 
@@ -327,7 +327,7 @@ $env:DSH_DESKTOP_DEFAULT_PROFILE = "desktop"
 dsh plugin --profile default add https://github.com/YuJunZhiXue/dsh-purge/archive/refs/heads/master.tar.gz
 ```
 
-After the command finishes, tell the user to fully quit and restart the host they just installed into, then **Apply** on that host’s Settings page. Do not Apply Web from Desktop or Desktop from Web. Then stop.
+After the command finishes, tell the user to fully quit and restart the host they just installed into, then open **dsh-purge** beside the session title and **Apply** on **Clean**. Do not Apply Web from Desktop or Desktop from Web. Then stop.
 
 <!-- AI-AGENT-END -->
 
@@ -537,13 +537,13 @@ Common failures:
 Writing `package.json` does **not** patch `@deepseek-ai` by itself. Restart, then click **Apply**.
 
 1. Fully quit the host you just installed into: stop `dsh web`; quit the community Desktop tray and open `DSH Desktop.exe`; quit the official EXE tray as well
-2. Open **that host’s** Settings page. **dsh-purge** should appear. Ctrl+F5 if cached
+2. Open **that host**. **dsh-purge** should appear beside the session title. Open it to reach Clean.
 3. Click **Apply** on this host only, or run `/purge apply` in chat. Do not Apply Web from Desktop or Desktop from Web
 4. Restart again when prompted so patched packages load in this process. Settings **Restart / Uninstall** relaunch the desktop app; they do not launch `dsh web`
 
 **6. How to confirm it is installed**
 
-- Settings shows the **dsh-purge** card
+- **dsh-purge** sits beside the session title, and **Apply** is on its Clean page
 - `/purge status` prints `DSH_HOME` and the patch list; the path should match step 1
 - `profiles/<name>/node_modules/dsh-purge` points at `plugins/dsh-purge`
 
@@ -551,7 +551,7 @@ If the card is missing, you likely edited the other `.dsh`, or you edited `web` 
 
 ### Uninstall
 
-Settings → **dsh-purge** → **Uninstall**. Confirm the dialog: uninstall restores the original Harness and removes this plugin. If patches were applied, they are reverted first. The current host then restarts (Web relaunches `dsh web`; community Desktop relaunches `DSH Desktop.exe`).
+**dsh-purge** beside the session title → **Clean** → **Uninstall**. Confirm the dialog: uninstall restores the original Harness and removes this plugin. If patches were applied, they are reverted first. The current host then restarts (Web relaunches `dsh web`; community Desktop relaunches `DSH Desktop.exe`).
 
 ```sh
 # or from a terminal

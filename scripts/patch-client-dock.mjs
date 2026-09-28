@@ -411,19 +411,17 @@ const newApply = `		function apply(ctx) {
 			ctx.effect(() => ctx.locale.register(NS, { zh, en }), "dsh-purge: dictionaries");
 			const t = ctx.locale.bind(NS);
 			translate = t;
-			ctx.slots.inject("settings.section", () => ctx.slots.register({
-				name: "settings.section",
-				id: "dsh-purge",
-				order: 40,
-				label: () => t("nav"),
-				locale: NS,
-				inject: () => ({ t }),
-			}, SettingsRoot));
 			ctx.slots.inject("shell.overlay", () => ctx.slots.register({
 				name: "shell.overlay",
 				id: "dsh-purge-dock",
 				order: 50,
-			}, () => h(react.Fragment, null, h(PurgeDock), h(HeroNewSessionMount))));
+			}, () => h(react.Fragment, null, h(PurgeDock), h(HeroNewSessionMount), h(EnvAdaptSendGate))));
+			ctx.slots.inject("conversation.session.header.utilities", () => ctx.slots.register({
+				name: "conversation.session.header.utilities",
+				id: "dsh-purge-header",
+				order: 90,
+				label: () => t("dock.inSession"),
+			}, () => h(SessionHeaderPurge)));
 			try {
 				if (typeof ctx.inject === "function") {
 					ctx.inject(["sessions", "uiWorkspace", "workspaces", "conversation"], (host) => installRewindUi(host));

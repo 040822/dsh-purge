@@ -4,7 +4,7 @@
 
 <h1 align="center">⚔️ DeepSeek Harness 网络安全红队工具（dsh-purge）</h1>
 
-<p align="center"><strong>Version 1.1.31</strong></p>
+<p align="center"><strong>Version 1.1.32</strong></p>
 
 <p align="center">
   <em>本机官方 DeepSeek Harness 网络安全红队评测插件。清洗宿主策略，并带内嵌演练台。不同模型可换不同提示词。默认提示词面向国模「小码酱」。求 Star 收藏 ⭐</em>
@@ -57,7 +57,7 @@ Harness 不只是把问题交给模型。它还会在运行时改提示词、审
 | **宿主策略** | 调整默认文案、权限策略和工具上限。官方能力保留，不另写一套身份 |
 | **启动时** | 自动再检查并应用。npm 升级盖掉 `node_modules` 之后不用手改文件 |
 
-不写死盘符。按 `$DSH_HOME`、dsh 启动器旁边的 `.dsh`，再退回 `~/.dsh`。不改 Harness 源码仓库，设置页点「应用」才写入。身份只来自你的 `prompt-inject.md`。
+不写死盘符。按 `$DSH_HOME`、dsh 启动器旁边的 `.dsh`，再退回 `~/.dsh`。不改 Harness 源码仓库，在 **dsh-purge** 的「清洗」里点「应用」才写入。身份只来自你的 `prompt-inject.md`。
 
 本插件只处理使用者本机已安装的官方 `@deepseek-ai` 包和本机配置。它不是公网扫描器，也不是针对第三方站点的攻击套件。仓库内不含木马、未授权渗透脚本或对外攻击载荷。
 
@@ -120,7 +120,7 @@ Web、社区桌面端、官方桌面 EXE **分开装、分开应用**。只装�
 只把插件写进 profile **还不会**改 `@deepseek-ai`。
 
 1. **退出并重新打开**刚装的那个宿主。Web 关掉 `dsh web` 再开；桌面端退出托盘，再打开对应的 exe。
-2. 在**这个宿主**的设置页看到「dsh-purge」，点 **「应用」**。有缓存就先 Ctrl+F5。会话标题旁也会出现同一个按钮。
+2. 点会话标题旁的 **dsh-purge**，在右侧栏的 **清洗** 里点 **「应用」**。宿主的设置页里没有这个条目。
 3. 按提示 **再重启一次**。补丁这时才进入当前进程。点「重启」才会重启，不会装完自动重启。
 
 Web 的「应用 / 重启 / 卸载」只动 Web。桌面端的只动桌面应用，不会去拉 `dsh web`。不要在 Web 里点桌面端的应用，也不要反过来。
@@ -141,7 +141,7 @@ dsh plugin --profile web add https://github.com/YuJunZhiXue/dsh-purge/archive/re
 dsh plugin --profile web add .
 ```
 
-然后按上面三步，在 **Web** 设置页点「应用」。
+然后按上面三步，点会话标题旁的 **dsh-purge**，在 **清洗** 里点「应用」。
 
 <a id="desktop"></a>
 
@@ -155,7 +155,7 @@ dsh plugin add https://github.com/YuJunZhiXue/dsh-purge/archive/refs/heads/maste
 
 不要用 PATH 上的官方 `dsh plugin --profile desktop`，这条会被拒绝。不要用 `dsh://`，那是官方 EXE 的协议。
 
-然后退出托盘，重新打开 `DSH Desktop.exe`，在 **桌面端** 设置页点「应用」。
+然后退出托盘，重新打开 `DSH Desktop.exe`，点会话标题旁的 **dsh-purge**，在 **清洗** 里点「应用」。
 
 自定义安装目录时，把脚本里的 `$exe` 换成该目录下的 `DSH Desktop.exe`。源用 tar.gz 地址，避免本地路径里的空格把命令拆开。
 
@@ -258,13 +258,13 @@ export function installDshPurgeToDesktop() {
 
 </details>
 
-然后完全退出官方客户端（含托盘），再打开，在它自己的设置页点「应用」。
+然后完全退出官方客户端（含托盘），再打开，点会话标题旁的 **dsh-purge**，在「清洗」里点「应用」。
 
 **官方桌面点「应用」，然后重启即可。**
 
 ### 怎样算装上了
 
-- 设置页有「dsh-purge」
+- 会话标题旁有 **dsh-purge**，点开后在「清洗」里能点「应用」
 - 聊天里 `/purge status` 能打出 `DSH_HOME` 和补丁列表，路径应是你正在用的那一份
 - 没装的可选包（例如梁神）显示跳过，不挡住应用完成
 
@@ -327,7 +327,7 @@ $env:DSH_DESKTOP_DEFAULT_PROFILE = "desktop"
 dsh plugin --profile default add https://github.com/YuJunZhiXue/dsh-purge/archive/refs/heads/master.tar.gz
 ```
 
-命令结束后，提醒：完全退出并重启刚装的那个宿主，再在该宿主设置页点「应用」。Web 和桌面端不要交叉点应用。然后停止。
+命令结束后，提醒：完全退出并重启刚装的那个宿主，再点会话标题旁的 **dsh-purge**，在「清洗」里点「应用」。Web 和桌面端不要交叉点应用。然后停止。
 
 <!-- AI-AGENT-END -->
 
@@ -537,21 +537,21 @@ pnpm install
 只写入 `package.json` **还不会**改 `@deepseek-ai` 包，必须重启后再点「应用」。
 
 1. 完全退出刚装的那个宿主：Web 关掉 `dsh web`；社区桌面端退出托盘再开 `DSH Desktop.exe`；官方 EXE 也要退出托盘
-2. 打开**这个宿主**的设置页，应出现「dsh-purge」。有缓存就 Ctrl+F5
+2. 打开**这个宿主**，会话标题旁应出现 **dsh-purge**。点开后是「清洗」。
 3. 只在这个宿主点「应用」，或聊天 `/purge apply`。不要用 Web 去点桌面端的应用，也不要反过来
 4. 按提示再重启一次，补丁才会进当前进程。桌面端的「重启 / 卸载」会重启桌面应用，不会去拉 `dsh web`
 
 **6. 怎么确认装上了**
 
-- 设置页有「dsh-purge」卡片
+- 会话标题旁有 **dsh-purge**
 - 聊天 `/purge status` 能打出 `DSH_HOME` 和补丁列表，路径应等于第 1 步用的那份
 - `profiles/<名>/node_modules/dsh-purge` 指向 `plugins/dsh-purge`
 
-还没有卡片时，多半是改错了另一份 `.dsh`，或改了 `web` 却在桌面端里等设置页。回到第 1 步核对路径，不要在两份主目录各改一半。
+还没有这个按钮时，多半是改错了另一份 `.dsh`，或改了 `web` 却在桌面端里等。回到第 1 步核对路径，不要在两份主目录各改一半。
 
 ### 卸载
 
-设置页 →「dsh-purge」→「卸载」。弹窗确认：卸载将还原回原版并清除本插件。如果已经点过「应用」，会先还原补丁，再删插件文件，然后重启当前宿主（Web 重启 `dsh web`；桌面端重启 `DSH Desktop.exe`）。
+会话标题旁的 **dsh-purge** →「清洗」→「卸载」。弹窗确认：卸载将还原回原版并清除本插件。如果已经点过「应用」，会先还原补丁，再删插件文件，然后重启当前宿主（Web 重启 `dsh web`；桌面端重启 `DSH Desktop.exe`）。
 
 ```sh
 # 也可以用命令行
