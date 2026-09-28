@@ -1,3 +1,14 @@
+# 1.1.26
+
+## 中文
+
+- **修复测试通道被正式版同号藏掉**：`1.1.25` 正式发布后，`1.1.25-beta.*` 因「正式已追上」逻辑整通道不可见；现 **beta 分支 tip 始终列出**（正式/测试并行，测试带红队）。
+- 已追上的旧 beta **标签**仍会隐藏；`1.1.11-beta` 仍下线。
+
+## English
+
+- **Fix beta lane hidden by same-number stable**: after `1.1.25` stable, `1.1.25-beta.*` vanished via the “stable caught up” filter; the **beta branch tip always stays listed** (parallel channels; beta carries red-team).
+- Older caught-up beta **tags** still hide; `1.1.11-beta` stays withdrawn.
 # 1.1.25
 
 ## 中文
