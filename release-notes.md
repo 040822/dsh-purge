@@ -1,3 +1,17 @@
+# 1.1.39
+
+## 中文
+
+- 版本升级到 1.1.39。
+- 中文 Windows 上，官方桌面版点「安装并重启」不再停在「正在准备重启」。更新脚本首行改为纯 ASCII，路径里的中文写成 `\u` 转义，避免 Windows Script Host 按 GBK 把换行吞进注释。
+- macOS 和 Linux 不走这条脚本，重启方式不变。
+
+## English
+
+- Version 1.1.39.
+- On Chinese Windows, the official desktop install-and-restart no longer stays on preparing to restart. The update script starts with an ASCII comment, and non-ASCII paths are written as `\u` escapes, so Windows Script Host does not swallow the newline when it reads the file as GBK.
+- macOS and Linux do not use this script. Their restart path is unchanged.
+
 # 1.1.38
 
 ## 中文

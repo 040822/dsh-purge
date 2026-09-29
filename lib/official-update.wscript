@@ -1,4 +1,4 @@
-// 占位符由 official-update.js 填上。退出当前官方客户端，运行已下载的安装包，成功后再打开。
+// Placeholders are filled by official-update.js. Quit the official client, run the downloaded installer, then reopen.
 var exe = __EXE_JSON__;
 var installer = __INSTALLER_JSON__;
 var resources = __RESOURCES_JSON__;
