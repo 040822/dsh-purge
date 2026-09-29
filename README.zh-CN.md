@@ -4,7 +4,7 @@
 
 <h1 align="center">⚔️ DeepSeek Harness 网络安全红队工具（dsh-purge）</h1>
 
-<p align="center"><strong>Version 1.1.39</strong></p>
+<p align="center"><strong>Version 1.1.40</strong></p>
 
 <p align="center">
   <em>本机官方 DeepSeek Harness 网络安全红队评测插件。清洗宿主策略，并带内嵌演练台。不同模型可换不同提示词。默认提示词面向国模「小码酱」。求 Star 收藏 ⭐</em>
@@ -15,7 +15,7 @@
   <a href="https://github.com/YuJunZhiXue/dsh-purge/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-65a30d?style=flat" alt="MIT license"></a>
   <a href="https://awesome-dsh-plugin.com"><img src="https://awesome-dsh-plugin.com/badge.svg" alt="awesome · DSH plugin"></a>
   <a href="https://deepseek.stream/plugins/dsh-purge"><img src="https://img.shields.io/badge/Hub-dsh--purge-1a73e8" alt="DeepSeek Harness Hub"></a>
-  <a href="https://www.deepseek.com/harness/"><img src="https://img.shields.io/badge/dsh-0.1.7--rc.2-blue" alt="DSH"></a>
+  <a href="https://www.deepseek.com/harness/"><img src="https://img.shields.io/badge/dsh-0.2.0--rc.2-blue" alt="DSH"></a>
   <br>
   <img src="https://img.shields.io/badge/Node.js-%3E%3D18-339933?logo=node.js&logoColor=fff" alt="Node.js">
   <img src="https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=000" alt="JavaScript">
@@ -25,9 +25,9 @@
   <a href="README.md">English</a> | <a href="README.zh-CN.md">中文</a>
 </p>
 
-> **点「应用」之后，必须再点「重启」，注入才会生效。** 「应用」只把提示词和补丁写进文件，当前这个进程还是旧的。重启完成、宿主重新打开后，新开一轮对话，注入才进当前会话。只点应用、不重启，看起来就像没注入。
+> **点「应用」会写入提示词和补丁，并自动重启宿主。** 重启完成后新开一轮对话，注入才进当前会话。若应用失败（例如补丁未全部打上），不会自动重启。
 
-> 当前对准 **dsh 0.1.7-rc.2**。上一档 **0.1.7-rc.1**（含 `0.1.7-rc.1.20260924.1`）仍认（Node.js **≥18**；Windows 无闪窗需要 **Node ≥22** 的 `registerHooks`，更低版本仍用文件级 `windowsHide`）。旧宿主里已经不存在的条文不再打。其它版本对不上的原文会显示待应用或跳过，不会乱改文件。兼容 0.1.2 社区预设的 `text` 字段，以及 `dsh-mnemon` 旧会话的 v0 `summary`。装完必须 **应用 + 重启**。
+> 当前对准 **dsh 0.2.0-rc.2**；**0.1.7-rc.2** / **0.1.7-rc.1** 仍可用（Node.js **≥18**；Windows 无闪窗需要 **Node ≥22** 的 `registerHooks`，更低版本仍用文件级 `windowsHide`）。旧宿主里已经不存在的条文不再打。其它版本对不上的原文会显示待应用或跳过，不会乱改文件。兼容 0.1.2 社区预设的 `text` 字段，以及 `dsh-mnemon` 旧会话的 v0 `summary`。装完要点一次 **应用**（成功后会自动重启）。
 >
 > 插件市场只看介绍：[DeepSeek Harness Hub](https://deepseek.stream/plugins/dsh-purge)。不要用 `deepseek.stream/api/plugins/download?...` 安装。
 
@@ -190,7 +190,7 @@ $env:DSH_DESKTOP_DEFAULT_PROFILE = "desktop"
 
 ### 官方桌面 EXE
 
-已经安装 **DeepSeek Harness 官方桌面客户端** 时，用下面的命令，或点按钮走 `dsh://`。社区 DSH Desktop **不认** 这个协议，请回到上一节。当前补丁对准 **0.1.7-rc.2**，**0.1.7-rc.1** 的旧锚点还留着。
+已经安装 **DeepSeek Harness 官方桌面客户端** 时，用下面的命令，或点按钮走 `dsh://`。社区 DSH Desktop **不认** 这个协议，请回到上一节。当前补丁对准 **0.2.0-rc.2**，**0.1.7-rc.2** / **0.1.7-rc.1** 的旧锚点还留着。
 
 ```sh
 dsh plugin --profile default add https://github.com/YuJunZhiXue/dsh-purge/archive/refs/heads/master.tar.gz
@@ -260,7 +260,7 @@ export function installDshPurgeToDesktop() {
 
 然后完全退出官方客户端（含托盘），再打开，点会话标题旁的 **dsh-purge**，在「清洗」里点「应用」。
 
-**官方桌面点「应用」，然后重启即可。**
+**官方桌面点「应用」即可（成功后会自动重启）。**
 
 ### 怎样算装上了
 
@@ -680,7 +680,7 @@ dsh-purge --edit
 purge_status   purge_apply   purge_revert
 ```
 
-设置页「应用」完成后需要重启才会加载已改的包文件。点「重启」才会重启，不会自动重启。补丁标题下是正式版：可以看版本和切换。回退后会固定在该版本，要回到最新再点「更新」。测试版通道已去掉。
+设置页「应用」成功后会自动重启，以加载已改的包文件；也可手动点「重启」。补丁标题下是正式版：可以看版本和切换。回退后会固定在该版本，要回到最新再点「更新」。测试版通道已去掉。
 
 输入框旁的「回退」会丢掉最近一轮对话，并把上一句填回输入框；聊天里 `/rewind` 同样可用。宿主不能在原会话里截断，所以回退会另开一条承载截断后的内容，并把原来那条从侧边栏移出。多退几次不会在列表里堆出一串分支。
 
@@ -756,7 +756,7 @@ flowchart LR
 4. 嵌套 `@deepseek-ai/dsh/node_modules/@deepseek-ai`
 5. 系统默认 `~/.dsh`
 
-**桌面端：** 只改当前正在运行的桌面安装。官方客户端点「应用」，然后重启即可。社区端点「应用」，然后重启即可。
+**桌面端：** 只改当前正在运行的桌面安装。官方客户端点「应用」即可（成功后会自动重启）。社区端点「应用」，然后重启即可。
 
 找不到目标时提示设置 `DSH_BASE`，不改文件。
 

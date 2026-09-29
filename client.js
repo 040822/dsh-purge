@@ -1293,12 +1293,6 @@ body[data-ds-dark-theme] .dshp-dock-body .dshp-switch button.is-on{background:#3
 								setNotice({ kind: "error", text: tr("err.action", { action: label, error: d.error || "" }) });
 								return;
 							}
-							if (action === "apply" && (d.unpacked_asar || d.needs_full_quit)) {
-								setAskOfficialRestart(true);
-								setNotice({ kind: "ok", text: tr("restart.official.body") });
-								loadAll();
-								return;
-							}
 							if (action === "apply") {
 								if (typeof d.defaultContent === "string") setDefaultOverride(d.defaultContent);
 								if (typeof d.override_content === "string") {
@@ -1335,9 +1329,15 @@ body[data-ds-dark-theme] .dshp-dock-body .dshp-switch button.is-on{background:#3
 								loadAll();
 								return;
 							}
+							if (action === "apply" && (d.restart_after_apply || d.restarting || d.unpacked_asar || d.needs_full_quit)) {
+								setNotice({ kind: "ok", text: tr("update.restarting") });
+								loadAll();
+								const surf = hostSurfaceOf(state) || clientGuessSurface() || "web";
+								restartDsh(setNotice, setPatchBusy, tr, surf);
+								return;
+							}
 							setNotice({ kind: "ok", text: tr("ok.done") });
 							loadAll();
-							if (action === "apply") setAskRestart(true);
 						})
 						.catch((e) => {
 							if (ticket !== actionTicket.current) return;

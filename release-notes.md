@@ -1,3 +1,19 @@
+# 1.1.40
+
+## 中文
+
+- 版本升级到 1.1.40。
+- 适配 **DSH 0.2.0-rc.2**：Anthropic OAuth 不再在系统提示最前面强插「You are Claude Code…」，自定义 `prompt-inject` 不会被压到后面。
+- 去掉在 0.2 里已不存在的 **patch 41**（developer 角色改写），避免无效补丁占位。
+- 设置页点 **应用** 成功后 **自动重启** 宿主，不必再打开插件点第二次重启。
+
+## English
+
+- Version 1.1.40.
+- For **DSH 0.2.0-rc.2**, Anthropic OAuth no longer prepends “You are Claude Code…” ahead of your system prompt, so custom `prompt-inject` is not pushed behind a Claude identity block.
+- Removed **patch 41** (developer-role remap) because those needles are gone in 0.2.
+- After **Apply** in settings, the host **restarts automatically**; you no longer need to open the plugin again to confirm restart.
+
 # 1.1.39
 
 ## 中文
