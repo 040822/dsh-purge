@@ -1,3 +1,29 @@
+# 1.1.38
+
+## 中文
+
+- 版本升级到 1.1.38。
+- 红队不再替用户下载工具。没有安装脚本时，引导改走演练台「环境适配」，由用户自己填路径。
+- 长时间任务会在系统提示词里放一张「本次目标」卡。指挥和子代理看的是同一张：只打这个单位，回报里带出来的其它单位不打。子代理按角色使用自己的提示词，派活时的单位名称必须和这张卡一致。
+- 工具查找认发行版上的真实文件名，例如 Kali 的 `httpx-toolkit`、`impacket-secretsdump`，不再把 Python 的 `httpx` 当成扫描器。
+- 官方桌面在 macOS、Linux 上也能找到 `app.asar`（Mac 用 `Contents/Resources`）。Windows 以外不再包一层会把 `require` 弄坏的控制台隐藏。
+- 红队接入锚点门：开头几步输出上限 1024；第一段思考里有 `we`、没有 `let me` 就放开，否则同一轮最多再走 4 步。上下文压缩后再关一次。红队工具和人设保持原样。
+- 随包技能同步到 `$DSH_HOME/redteam/skills`，预设用 `dshHomePath` 指向它，不再把某一台电脑的 `node_modules` 路径写进预设。你自己的技能仍在 `$DSH_HOME/skills`，同名以你的为准。
+- 修好红队模式不显示：声明预设时漏了路径变量，插件中途退出，模式下拉就没有这一项。
+- 说明里加回赞助地址。
+
+## English
+
+- Version 1.1.38.
+- Red team no longer downloads tools for you. When the setup script is missing, the guide points at the drill console environment page so you fill in the paths.
+- Long jobs keep a target card in the system prompt. The commander and subagents see the same card: stay on that organization, and do not switch to other names that show up in results. Each subagent loads its own role text, and dispatched work must use the name on the card.
+- Tool lookup accepts distro filenames such as Kali's `httpx-toolkit` and `impacket-secretsdump`, and does not treat Python's `httpx` as the scanner.
+- The official desktop app can find `app.asar` on macOS and Linux (`Contents/Resources` on Mac). Outside Windows, the console-hide wrapper that broke `require` is not installed.
+- Red team uses an anchor gate: the first steps are capped at 1024 output tokens, the cap lifts when the first reasoning block contains `we` and not `let me`, otherwise it lasts at most 4 steps in that turn, and a context compaction closes the gate again. Red team tools and the persona stay as they are.
+- Bundled skills are copied to `$DSH_HOME/redteam/skills` and the preset points there with `dshHomePath`, instead of a machine-specific `node_modules` path. Your own skills stay in `$DSH_HOME/skills` and win on the same name.
+- Red team mode shows in the mode list again. Declaring the preset no longer exits early because a path variable was missing.
+- The sponsor addresses are back in the readme.
+
 # 1.1.37
 
 ## 中文

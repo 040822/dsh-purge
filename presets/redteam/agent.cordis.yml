@@ -60,9 +60,10 @@
       ## 并发硬约束（最多 3 个，默认顺序派）
       - **同一靶标同时最多 3 个执行智能体**。派活前先 `redteam_agent_slot`（action=status）看名额；要派就 action=acquire 占位；被拒就是满了，**不要重试硬塞**，等现有智能体回报。
       - **默认一个一个派、按顺序推进**；只有确实互不依赖的活才并行，且总数 ≤ 3。
-      - 每个子任务描述必须**自包含**：目标范围、已知信息、**已经测过什么（避免重复打）**、可用入口（贴真实值：隧道监听地址 / WebShell URL / 凭据）、期望产出（落什么库）、以及"你是叶子节点，不要再往下委派"。
+      - \`subagent\` 的 \`prompt\` **第一行**必须是 \`redteamRole: <code>\`，code 只能是 \`recon\`、\`assess\`、\`vuln-scan\`、\`exploit\`、\`internal\`。这一行把 \`agents/<code>.md\` 放进子会话系统提示词。**不要**把 \`redteam_role_prompt\` 的全文抄进任务。
+      - 第一行之后必须**自包含**：目标范围、已知信息、**已经测过什么（避免重复打）**、可用入口（贴真实值：隧道监听地址 / WebShell URL / 凭据）、期望产出（落什么库）、以及"你是叶子节点，不要再往下委派"。单位名称必须和系统提示词里的「本次目标」一致。
 
-      ## 六个角色（用 redteam_role_prompt 取完整职责，写进子任务描述）
+      ## 六个角色（职责在子会话系统提示词里，这里只作派谁的索引）
       - `recon` **信息收集**：只收集资产、把靶标单位的资产**收集完整**（被动 FOFA/crt.sh + 主动探测，重点边缘资产与未备案资产），**不碰漏洞检测**。
       - `assess` **资产梳理**：把收集到的资产**一条一条过**，评估易打性（priority/potential/reason）并**全部落库**，产出"先打谁"的排序。
       - `vuln-scan` **漏洞发现**：逐条过资产，**先查库避免重复劳动** → 优先 Nday/1day → 再提取前端接口探未授权 → 每条漏洞落库 + 原始请求。
@@ -113,6 +114,17 @@
       - **只有凭据不算拿到账号**：必须浏览器实测登录成功才记账号权限分；自己注册/自建的账号不算得分权限（`self_created=true` 只留痕）。
       - **自己的 VPS / 自建服务器上开的代理不算隧道**：隧道必须说清目标侧那一端（`entry_kind`）。
       - 报告只收录拿到分的成果，且每条要能复现（目标 → 拿到什么 → 怎么拿到的（命令）→ 原始请求）。
+
+# 锚点门：第一段思考含 we 且不含 let me 才放开 1024 输出上限；锚不住最多 4 步。
+# 不裁工具、不换人设。压缩后再关一次。放开后工作区长说明改成点名文件。
+- id: anchor-gate
+  name: ./anchor-gate.mjs
+  config:
+    anchorGate: true
+    maxBootstrapSteps: 4
+    promoteAfterFirstResponse: true
+    bootstrapMaxTokens: 1024
+    instructionHint: true
 
 - id: redteam-tools
   name: dsh-purge/redteam/tools
@@ -177,10 +189,9 @@
 # 迁入 $DSH_HOME/skills，技能库页面只做浏览。
 - id: skill-filesystem
   name: '@deepseek-ai/dsh-skill-filesystem'
-  # 红队技能随包分发：__REDTEAM_SKILLS_DIR__ 由插件首次启动时替换成包内 skills/ 的绝对路径。
-  # 技能根**顺序即优先级**（同名技能取先出现的那份）：$DSH_HOME/skills 必须排在包内目录前面，
-  # 否则用户在自己那份里配好的 VPS 地址 / 密钥会被随包模板（里面是 `<你的VPS_IP>` 这类占位符）盖住，
-  # 连技能可用性判定都会误报成"技能坏了"。
+  # 随包技能在 $DSH_HOME/redteam/skills，由插件启动时从包内同步。
+  # 技能根顺序即优先级（同名取先出现的那份）：$DSH_HOME/skills 必须排在前面，
+  # 否则用户在自己那份里配好的 VPS 地址 / 密钥会被随包模板（里面是 `<你的VPS_IP>` 这类占位符）盖住。
   config:
     # 只扫描"$DSH_HOME/skills + 本插件自带的"两个根：
     # 关掉 includeDefaultRoots，避免把 .agents/skills、项目级的大技能包（动辄数百个）
@@ -188,7 +199,7 @@
     includeDefaultRoots: false
     customSkillDirs:
       - !!js dshHomePath('skills')
-      - {{REDTEAM_SKILLS_DIR}}
+      - !!js dshHomePath('redteam/skills')
 
 - id: tool-skill
   name: '@deepseek-ai/dsh-tool-skill'

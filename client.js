@@ -4158,7 +4158,7 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
               placeholder: '该角色的系统提示词（Markdown）',
             }),
             h('div', { style: { fontSize: 11, color: 'var(--dsw-alias-label-secondary)', marginTop: 6 } },
-              '保存后写入 agents/' + (active || 'role') + '.md，并在该角色会话的每次模型请求前注入。'))))
+              '保存后写入 agents/' + (active || 'role') + '.md。子会话任务第一行写 redteamRole: recon、assess、vuln-scan、exploit 或 internal 后，对应文件进入系统提示词。'))))
     }
 
     /* ---------------------------------------------------------- 技能库（DSH 原生） */
