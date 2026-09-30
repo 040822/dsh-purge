@@ -174,6 +174,11 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 			"theme.ink": "墨",
 			"purge.title": "补丁",
 			"override.title": "提示词",
+			"own.title": "自己的服务器",
+			"own.hint": "每行一个 IP 或完整主机名。可以写成 账号@主机，账号只用来认出这种写法。主机名会连同它当时解析出的地址一起放行。不要写密钥、密码、网段。",
+			"own.save": "保存名单",
+			"saved.own": "已保存自己的服务器",
+			"saved.own.dropped": "已保存。有 {n} 行不是单个 IP 或主机名，已丢掉",
 			"metric.purged": "补丁",
 			"metric.shim": "shim",
 			"metric.bak.yes": "有备份",
@@ -420,6 +425,11 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 			"theme.ink": "Ink",
 			"purge.title": "Patches",
 			"override.title": "Prompt",
+			"own.title": "Own servers",
+			"own.hint": "One IP or exact hostname per line. account@host is accepted; the account only identifies that host. A hostname also allows the addresses it resolves to. Do not enter a key, a password, or a range.",
+			"own.save": "Save list",
+			"saved.own": "Own servers saved",
+			"saved.own.dropped": "Saved. {n} lines were not a single IP or hostname and were dropped",
 			"metric.purged": "Patches",
 			"metric.shim": "shim",
 			"metric.bak.yes": "Backup",
@@ -1071,6 +1081,8 @@ body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-body .dshp-switch 
 			const [override, setOverride] = useState("");
 			const [defaultOverride, setDefaultOverride] = useState("");
 			const [overrideLoaded, setOverrideLoaded] = useState(false);
+			const [ownServers, setOwnServers] = useState("");
+			const [ownLoaded, setOwnLoaded] = useState(false);
 			const [patchBusy, setPatchBusy] = useState(false);
 			const [updateBusy, setUpdateBusy] = useState(false);
 			const [canApplyUpdate, setCanApplyUpdate] = useState(false);
@@ -1260,6 +1272,14 @@ body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-body .dshp-switch 
 						else setNotice({ kind: "error", text: tr("err.override", { error: (d && d.error) || "" }) });
 					})
 					.catch((e) => setNotice({ kind: "error", text: tr("err.override", { error: e.message }) }));
+				apiJson("/dsh-purge/own-servers")
+					.then((d) => {
+						if (d && d.ok) {
+							setOwnServers(typeof d.content === "string" ? d.content : "");
+							setOwnLoaded(true);
+						}
+					})
+					.catch(() => {});
 			}, []);
 
 			useEffect(() => { loadAll(); }, [loadAll]);
@@ -1660,6 +1680,42 @@ body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-body .dshp-switch 
 					className: "dshp-hint",
 					style: { margin: "8px 0 0", color: "var(--dshp-danger, #c44)", fontSize: 12 },
 				}, t("need.prompt")) : null,
+				h("div", { className: "dshp-sub" },
+					h("h4", null, t("own.title")),
+					h("div", { className: "dshp-row", style: { margin: 0 } },
+						h(Btn, {
+							kind: "primary",
+							tiny: true,
+							disabled: !ownLoaded,
+							onClick: () => {
+								fetch("/dsh-purge/own-servers", {
+									method: "POST",
+									headers: { "content-type": "application/json" },
+									body: JSON.stringify({ content: ownServers }),
+								}).then((r) => r.json()).then((d) => {
+									if (!d || !d.ok) {
+										setNotice({ kind: "error", text: (d && d.error) || t("err.override", { error: "" }) });
+										return;
+									}
+									if (typeof d.content === "string") setOwnServers(d.content);
+									setNotice({
+										kind: "ok",
+										text: d.dropped > 0 ? t("saved.own.dropped", { n: d.dropped }) : t("saved.own"),
+									});
+								}).catch((e) => setNotice({ kind: "error", text: e.message }));
+							},
+						}, t("own.save")),
+					),
+				),
+				h("textarea", {
+					className: "dshp-area",
+					value: ownServers,
+					onChange: (e) => setOwnServers(e.target.value),
+					spellCheck: false,
+					rows: 4,
+					style: { minHeight: 96 },
+				}),
+				h("p", { className: "dshp-hint", style: { margin: "8px 0 0", color: "var(--dshp-mute)", fontSize: 12 } }, t("own.hint")),
 			);
 		}
 
