@@ -189,7 +189,7 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 			"warn.noRoot.desktop": "官方客户端的代码在 app.asar 里。点「应用」会解开并自动重启，不用另跑脚本。第三方 DSH Desktop 直接点「应用」。",
 			"unpack.restarting": "补丁已写入。点「重启」后客户端会自己重新打开。",
 			"restart.fullQuit": "正在重启，客户端会自己重新打开。",
-			"warn.noInject": "提示词优先；为空则注入当前启用的规则集。两边都空会提示必须添加。Skill 不顶替提示词。",
+			"warn.noInject": "默认只注入可编辑提示词。启用规则集后以规则集为主。两边都空会提示必须添加。Skill 不顶替提示词。",
 			"need.prompt": "提示词和规则集都是空的，必须先添加提示词，或启用一条有内容的规则集。",
 			"btn.restoreInject": "恢复默认",
 			"saved.restoreInject": "已填入默认提示词，点保存写入",
@@ -304,6 +304,7 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 			"restart.fail": "失败: {error}",
 			"restart.confirm": "清洗已完成，重启后生效。",
 			"restart.confirm.desktop": "清洗已完成，重启桌面应用后生效。",
+			"restart.asarSwap": "补丁已写入磁盘。正在结束桌面进程并挪开 app.asar，完成后会自动重新打开；若仍无效，请先完全退出 Harness（托盘也关），再点一次应用。",
 			"surface.web": "Web",
 			"surface.desktop": "桌面端",
 			"surface.gui": "GUI",
@@ -362,9 +363,9 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 			"rewind.empty": "没有可回退的上一句",
 			"rewind.fail": "回退失败: {error}",
 			"rewind.once": "回退一次",
-			"rewind.once.hint": "只退当前对话上一句",
+			"rewind.once.hint": "把上一句放回输入框，并清掉已经发出去的内容",
 			"rewind.round": "回退上一轮",
-			"rewind.round.hint": "退回上一轮主对话，本轮子代理一并去掉",
+			"rewind.round.hint": "把上一轮放回输入框，并清掉已经发出去的内容",
 			"continue.title": "失败重试 / 继续",
 			"continue.hint": "请求失败会自动重试；异常停止或中断可点「继续」或自动续跑。自己点停止不会自动继续。次数用完后需新开一轮。",
 			"continue.autoRetry": "失败自动重试",
@@ -434,7 +435,7 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 			"warn.noRoot.desktop": "Official Harness keeps its code in app.asar. Apply unpacks it and restarts the app. Third-party DSH Desktop: just Apply.",
 			"unpack.restarting": "Patches are written. Click Restart and the client opens again by itself.",
 			"restart.fullQuit": "Restarting. The client will open again by itself.",
-			"warn.noInject": "The prompt box wins. If it is empty, the enabled rule set is injected. If both are empty you will be asked to add a prompt. Skills do not replace the prompt.",
+			"warn.noInject": "By default only the editable prompt is injected. An enabled rule set takes over. If both are empty you will be asked to add a prompt. Skills do not replace the prompt.",
 			"need.prompt": "Both the prompt and the rule set are empty. Add a prompt, or enable a rule that has content.",
 			"btn.restoreInject": "Reset default",
 			"saved.restoreInject": "Default prompt loaded. Save to write.",
@@ -549,6 +550,7 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 			"restart.fail": "Failed: {error}",
 			"restart.confirm": "Apply finished. Restart to take effect.",
 			"restart.confirm.desktop": "Apply finished. Restart the desktop app to take effect.",
+			"restart.asarSwap": "Patches are on disk. Quitting the desktop app and moving app.asar aside; it will reopen when done. If behavior is unchanged, fully quit Harness (including tray) and Apply again.",
 			"surface.web": "Web",
 			"surface.desktop": "Desktop",
 			"surface.gui": "GUI",
@@ -607,9 +609,9 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 			"rewind.empty": "Nothing to undo",
 			"rewind.fail": "Undo failed: {error}",
 			"rewind.once": "Undo once",
-			"rewind.once.hint": "Drop the last turn of this chat",
+			"rewind.once.hint": "Put the last line back in the box and drop what was already sent",
 			"rewind.round": "Undo last round",
-			"rewind.round.hint": "Back to the previous main turn, including this round's subagents",
+			"rewind.round.hint": "Put the last round back in the box and drop what was already sent",
 			"continue.title": "Retry / Continue",
 			"continue.hint": "Failed requests auto-retry. After an abnormal stop or interrupt, use Continue or auto-resume. A manual stop never auto-continues. Counts reset after a completed turn.",
 			"continue.autoRetry": "Auto-retry on failure",
@@ -1329,8 +1331,16 @@ body[data-ds-dark-theme] .dshp-dock-body .dshp-switch button.is-on{background:#3
 								loadAll();
 								return;
 							}
+							if (action === "apply" && d.asar_swap_started) {
+								setNotice({ kind: "ok", text: tr("restart.asarSwap") });
+								loadAll();
+								return;
+							}
 							if (action === "apply" && (d.restart_after_apply || d.restarting || d.unpacked_asar || d.needs_full_quit)) {
-								setNotice({ kind: "ok", text: tr("update.restarting") });
+								setNotice({
+									kind: "ok",
+									text: d.asar_still_sealed ? tr("restart.asarSwap") : tr("update.restarting"),
+								});
 								loadAll();
 								const surf = hostSurfaceOf(state) || clientGuessSurface() || "web";
 								restartDsh(setNotice, setPatchBusy, tr, surf);
@@ -2269,6 +2279,11 @@ body[data-ds-dark-theme] .dshp-dock-body .dshp-switch button.is-on{background:#3
 				.then((d) => {
 					if (!d.ok) throw new Error(d.error || "restart failed");
 					const next = (d && d.surface) || surf;
+					if ((next === "desktop" || d.fullApp) && d.restarting === false) {
+						setNotice({ kind: "error", text: t("restart.fail", { error: d.note || "not started" }) });
+						setBusy(false);
+						return;
+					}
 					setNotice({ kind: "ok", text: hostText(t, "restarting", next) });
 					// 桌面端整应用会退出重开。先刷新内嵌 web 会单独重启 Host。
 					if (next === "desktop" || (d && d.fullApp) || clientGuessSurface() === "desktop") return;
@@ -2383,7 +2398,7 @@ body[data-ds-dark-theme] .dshp-dock-body .dshp-switch button.is-on{background:#3
 .dshp-rewind:hover:not(:disabled){background:var(--dsw-alias-interactive-bg-hover,rgba(127,127,127,.12));color:var(--dsw-alias-label-primary,currentColor)}
 .dshp-rewind:disabled{opacity:.4;cursor:default}
 .dshp-rewind svg{display:block}
-.dshp-rewind-menu{position:absolute;right:0;bottom:calc(100% + 6px);z-index:1200;box-sizing:border-box;min-width:196px;padding:4px;border:0;border-radius:12px;background:var(--dsw-specific-menu,#fff);color:var(--dsw-alias-label-primary,#1a1a1a);--dsw-elevation-stroke-color:var(--dsw-alias-border-l1);box-shadow:var(--dsw-elevation-prominent,0 8px 24px rgba(0,0,0,.16))}
+.dshp-rewind-menu{position:fixed;z-index:2147483000;box-sizing:border-box;min-width:220px;padding:4px;border:0;border-radius:12px;background:var(--dsw-specific-menu,#fff);color:var(--dsw-alias-label-primary,#1a1a1a);--dsw-elevation-stroke-color:var(--dsw-alias-border-l1);box-shadow:var(--dsw-elevation-prominent,0 8px 24px rgba(0,0,0,.16));transform:translateY(-100%)}
 body[data-ds-dark-theme] .dshp-rewind-menu{background:var(--dsw-specific-menu,#32312d);color:var(--dsw-alias-label-primary,#e6e2db);--dsw-elevation-stroke-color:var(--dsw-alias-border-l1,#3f3d38);box-shadow:var(--dsw-elevation-prominent,0 10px 28px rgba(0,0,0,.45))}
 .dshp-rewind-item{display:flex;flex-direction:column;gap:2px;width:100%;padding:8px 10px;border:0;border-radius:8px;background:transparent;color:inherit;text-align:left;cursor:pointer;font:12px/1.3 var(--ds-font-sans,system-ui,sans-serif)}
 .dshp-rewind-item:hover{background:var(--dsw-alias-interactive-bg-hover,rgba(127,127,127,.12))}
@@ -2659,35 +2674,7 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 			static getDerivedStateFromError() { return { failed: true }; }
 			componentDidCatch(error) { try { console.error("[dsh-purge] rewind slot:", error); } catch { /* ignore */ } }
 			render() {
-				if (this.state.failed) {
-					return h("button", {
-						type: "button",
-						className: "dshp-rewind",
-						title: "回退上一句",
-						onMouseDown: (e) => e.preventDefault(),
-						onClick: async () => {
-							const sessionId = currentSessionId(rewindSessions);
-							if (!sessionId) return;
-							try {
-								const data = await apiJson("/dsh-purge/rewind", {
-									method: "POST",
-									headers: { "content-type": "application/json" },
-									body: JSON.stringify({ sessionId, mode: "once" }),
-								});
-								if (data && data.ok && data.sessionId) {
-									if (data.at) rewindSeenAt = data.at;
-									const text = isPluginDraft(data.text) ? "" : (data.text || "");
-									armComposerFill(data.sessionId, text);
-									scheduleComposerFill(data.sessionId, text);
-									await openRewoundSession(rewindSessions, data.sessionId);
-									scheduleComposerFill(data.sessionId, text);
-								}
-							} catch (e) {
-								window.alert("回退失败: " + String((e && e.message) || e));
-							}
-						},
-					}, h("style", null, REWIND_CSS), "回退");
-				}
+				if (this.state.failed) return h(RewindFallback, this.props);
 				return h(RewindButton, this.props);
 			}
 		}
@@ -2800,15 +2787,121 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 			);
 		}
 
+		function rewindMenuNode(t, menuPos, menuRef, runRewind) {
+			const menu = h("div", {
+				className: "dshp-rewind-menu",
+				role: "menu",
+				ref: menuRef,
+				style: menuPos ? { left: menuPos.left + "px", top: menuPos.top + "px" } : { left: "8px", bottom: "48px", transform: "none" },
+			},
+				h("button", {
+					type: "button",
+					className: "dshp-rewind-item",
+					onMouseDown: (e) => { e.preventDefault(); e.stopPropagation(); },
+					onClick: (e) => { e.preventDefault(); e.stopPropagation(); runRewind("once"); },
+				},
+					h("b", null, rewindText(t, "rewind.once", "回退一次")),
+					h("span", null, rewindText(t, "rewind.once.hint", "把上一句放回输入框，并清掉已经发出去的内容")),
+				),
+				h("button", {
+					type: "button",
+					className: "dshp-rewind-item",
+					onMouseDown: (e) => { e.preventDefault(); e.stopPropagation(); },
+					onClick: (e) => { e.preventDefault(); e.stopPropagation(); runRewind("round"); },
+				},
+					h("b", null, rewindText(t, "rewind.round", "回退上一轮")),
+					h("span", null, rewindText(t, "rewind.round.hint", "把上一轮放回输入框，并清掉已经发出去的内容")),
+				),
+			);
+			try {
+				const rd = require("react-dom");
+				if (rd && typeof rd.createPortal === "function" && typeof document !== "undefined") {
+					return rd.createPortal(menu, document.body);
+				}
+			} catch { /* 没有 portal 时菜单仍挂在按钮旁 */ }
+			return menu;
+		}
+
+		class RewindFallback extends Component {
+			constructor(p) {
+				super(p);
+				this.state = { menu: false, busy: false, notice: "", menuPos: null };
+				this.wrap = null;
+				this.menuEl = null;
+				this.onDoc = (event) => {
+					if (this.wrap && this.wrap.contains(event.target)) return;
+					if (this.menuEl && this.menuEl.contains(event.target)) return;
+					this.setState({ menu: false });
+				};
+			}
+			componentDidMount() {
+				document.addEventListener("mousedown", this.onDoc);
+			}
+			componentWillUnmount() {
+				document.removeEventListener("mousedown", this.onDoc);
+			}
+			run(mode) {
+				const sessionId = this.props.sessionId || currentSessionId(rewindSessions);
+				if (!sessionId || this.state.busy) return;
+				this.setState({ busy: true, menu: false, notice: "" });
+				apiJson("/dsh-purge/rewind", {
+					method: "POST",
+					headers: { "content-type": "application/json" },
+					body: JSON.stringify({ sessionId, mode }),
+				}).then(async (data) => {
+					if (!data || !data.ok || !data.sessionId || data.cleared === false) {
+						throw new Error((data && data.error) || "没有清掉之前发送的内容");
+					}
+					if (data.at) rewindSeenAt = data.at;
+					const text = isPluginDraft(data.text) ? "" : (data.text || "");
+					armComposerFill(data.sessionId, text);
+					await openRewoundSession(rewindSessions, data.sessionId);
+					scheduleComposerFill(data.sessionId, text);
+					this.setState({ busy: false });
+				}).catch((e) => {
+					this.setState({
+						busy: false,
+						notice: "回退失败: " + String((e && e.message) || e),
+					});
+				});
+			}
+			openMenu() {
+				const rect = this.wrap && this.wrap.getBoundingClientRect ? this.wrap.getBoundingClientRect() : null;
+				this.setState({
+					menu: !this.state.menu,
+					notice: "",
+					menuPos: rect ? { left: Math.max(8, rect.right - 228), top: Math.max(8, rect.top - 8) } : null,
+				});
+			}
+			render() {
+				const sessionId = this.props.sessionId || currentSessionId(rewindSessions);
+				const t = this.props.t || translate;
+				const label = this.state.busy ? "回退中…" : (this.state.notice ? this.state.notice.slice(0, 18) : "回退");
+				return h("div", { className: "dshp-rewind-wrap", ref: (node) => { this.wrap = node; } },
+					h("style", null, REWIND_CSS),
+					h("button", {
+						type: "button",
+						className: "dshp-rewind",
+						disabled: this.state.busy || !sessionId,
+						onMouseDown: (e) => e.preventDefault(),
+						onClick: (e) => { e.preventDefault(); this.openMenu(); },
+					}, label),
+					this.state.menu ? rewindMenuNode(t, this.state.menuPos, (node) => { this.menuEl = node; }, (mode) => this.run(mode)) : null,
+				);
+			}
+		}
+
 		function RewindButton(props) {
 			const t = props.t || translate;
 			const sessions = rewindSessions;
 			const inputActions = props.inputActions;
 			const sessionId = props.sessionId || currentSessionId(sessions);
 			const wrapRef = useRef(null);
+			const menuRef = useRef(null);
 			const [busy, setBusy] = useState(false);
 			const [notice, setNotice] = useState("");
 			const [menu, setMenu] = useState(false);
+			const [menuPos, setMenuPos] = useState(null);
 
 			useEffect(() => {
 				if (!sessionId) return;
@@ -2823,7 +2916,9 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 			useEffect(() => {
 				if (!menu) return;
 				const onDoc = (event) => {
-					if (wrapRef.current && !wrapRef.current.contains(event.target)) setMenu(false);
+					if (wrapRef.current && wrapRef.current.contains(event.target)) return;
+					if (menuRef.current && menuRef.current.contains(event.target)) return;
+					setMenu(false);
 				};
 				document.addEventListener("mousedown", onDoc);
 				return () => document.removeEventListener("mousedown", onDoc);
@@ -2840,20 +2935,23 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 						headers: { "content-type": "application/json" },
 						body: JSON.stringify({ sessionId, mode }),
 					});
-					if (!data || !data.ok || !data.sessionId) throw new Error((data && data.error) || "rewind");
+					if (!data || !data.ok || !data.sessionId || data.cleared === false) {
+						throw new Error((data && data.error) || "没有清掉之前发送的内容");
+					}
 					if (data.at) rewindSeenAt = data.at;
 					const text = isPluginDraft(data.text) ? "" : (data.text || "");
 					armComposerFill(data.sessionId, text);
 					await openRewoundSession(sessions, data.sessionId);
 					scheduleComposerFill(data.sessionId, text);
 				} catch (e) {
-					setNotice(rewindText(t, "rewind.fail", "回退失败: {error}").replace("{error}", String((e && e.message) || e)));
+					const message = rewindText(t, "rewind.fail", "回退失败: {error}").replace("{error}", String((e && e.message) || e));
+					setNotice(message);
 				} finally {
 					setBusy(false);
 				}
 			};
 
-			const onClick = async (event) => {
+			const onClick = (event) => {
 				event?.preventDefault?.();
 				event?.stopPropagation?.();
 				if (!sessionId || busy) return;
@@ -2861,20 +2959,15 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 					setMenu(false);
 					return;
 				}
-				setBusy(true);
-				setNotice("");
-				try {
-					const info = await apiJson("/dsh-purge/rewind/options?sessionId=" + encodeURIComponent(sessionId));
-					if (info && info.ok && info.kind === "main") {
-						setMenu(true);
-						return;
-					}
-					await runRewind("once");
-				} catch (e) {
-					setNotice(rewindText(t, "rewind.fail", "回退失败: {error}").replace("{error}", String((e && e.message) || e)));
-				} finally {
-					setBusy(false);
+				const rect = wrapRef.current?.getBoundingClientRect?.();
+				if (rect) {
+					setMenuPos({
+						left: Math.max(8, rect.right - 228),
+						top: Math.max(8, rect.top - 8),
+					});
 				}
+				setNotice("");
+				setMenu(true);
 			};
 
 			const failLabel = notice
@@ -2891,6 +2984,7 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 					className: "dshp-rewind",
 					title,
 					"aria-label": rewindText(t, "rewind.aria", "回退"),
+					"aria-expanded": menu ? "true" : "false",
 					disabled: busy || !sessionId,
 					onMouseDown: (e) => e.preventDefault(),
 					onClick,
@@ -2903,26 +2997,7 @@ body[data-ds-dark-theme] .dshp-rewind-item span{color:var(--dsw-alias-label-tert
 					),
 					label,
 				),
-				menu ? h("div", { className: "dshp-rewind-menu", role: "menu" },
-					h("button", {
-						type: "button",
-						className: "dshp-rewind-item",
-						onMouseDown: (e) => e.preventDefault(),
-						onClick: () => runRewind("once"),
-					},
-						h("b", null, rewindText(t, "rewind.once", "回退一次")),
-						h("span", null, rewindText(t, "rewind.once.hint", "只退当前对话上一句")),
-					),
-					h("button", {
-						type: "button",
-						className: "dshp-rewind-item",
-						onMouseDown: (e) => e.preventDefault(),
-						onClick: () => runRewind("round"),
-					},
-						h("b", null, rewindText(t, "rewind.round", "回退上一轮")),
-						h("span", null, rewindText(t, "rewind.round.hint", "退回上一轮主对话，本轮子代理一并去掉")),
-					),
-				) : null,
+				menu ? rewindMenuNode(t, menuPos, menuRef, runRewind) : null,
 			);
 		}
 

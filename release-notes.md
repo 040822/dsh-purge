@@ -1,3 +1,23 @@
+# 1.1.41
+
+## 中文
+
+- 版本升级到 1.1.41。
+- 官方模式只注入当前提示词；启用规则集后以规则集为主。红队再附上红队操作要求。
+- 回退留在当前会话：先选回退一次或上一轮，上一句放回输入框，并清掉已经发出去的内容。
+- 宿主没清洗完，或没有可注入的提示词时，不重启。
+- 默认已是完全权限时，新会话不再被钉回受限权限。官方模型的 Session Log 上传默认关闭。
+- 目标地址落在中国大陆、香港、澳门时停止。
+
+## English
+
+- Version 1.1.41.
+- Official modes inject the editable prompt, or the active rule set when one is enabled. Red team also keeps its operating section.
+- Rewind stays on the current session: choose one step or the last round, return the last line to the composer, and clear what was already sent.
+- Restart is cancelled unless the host is cleaned and inject text is present.
+- A full-access default is no longer pinned back to a restricted preset. Official model Session Log upload is off by default.
+- Targets whose addresses fall in mainland China, Hong Kong, or Macau are stopped.
+
 # 1.1.40
 
 ## 中文
