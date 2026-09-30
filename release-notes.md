@@ -1,3 +1,21 @@
+# 1.1.42
+
+## 中文
+
+- 版本升级到 1.1.42。
+- 清洗页提示词下面可以登记自己的服务器：每行一个 IP 或完整主机名，点保存名单。说明里写了步骤，并附了截图。
+- 新对话把提示词放在系统提示最前。面板改为白墨玻璃，两种主题都能看清字。
+- 补丁进度只计已应用的项。网页身份那条在后一条改写句子之后，仍显示已应用。
+- 补上 0.1.x 的入口针。已经打过的 0.2.0 不会被重写。
+
+## English
+
+- Version 1.1.42.
+- Under Prompt on the Clean page, register your own server: one IP or exact hostname per line, then Save list. The docs include the steps and a screenshot.
+- New chats place the prompt at the front of the system prompt. The dock is frosted glass, and both the light and ink themes stay readable.
+- The patch count includes only applied items. The web-surface identity row stays applied after the later sentence rewrite.
+- Needles for 0.1.x entry points were added. An already patched 0.2.0 host is not rewritten.
+
 # 1.1.41
 
 ## 中文

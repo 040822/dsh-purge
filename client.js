@@ -179,7 +179,8 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 			"own.save": "保存名单",
 			"saved.own": "已保存自己的服务器",
 			"saved.own.dropped": "已保存。有 {n} 行不是单个 IP 或主机名，已丢掉",
-			"metric.purged": "补丁",
+			"metric.purged": "已应用",
+			"metric.purged.skip": "已应用，另有 {n} 项跳过",
 			"metric.shim": "shim",
 			"metric.bak.yes": "有备份",
 			"metric.bak.no": "无备份",
@@ -430,7 +431,8 @@ window.__ModuleLoader__.load({ id: "dsh-purge", factory: (require) => {
 			"own.save": "Save list",
 			"saved.own": "Own servers saved",
 			"saved.own.dropped": "Saved. {n} lines were not a single IP or hostname and were dropped",
-			"metric.purged": "Patches",
+			"metric.purged": "Applied",
+			"metric.purged.skip": "Applied, {n} skipped",
 			"metric.shim": "shim",
 			"metric.bak.yes": "Backup",
 			"metric.bak.no": "No backup",
@@ -1495,8 +1497,7 @@ body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-body .dshp-switch 
 			const total = s && s.patches_total ? s.patches_total : 26;
 			const applied = s && typeof s.patches_applied === "number" ? s.patches_applied : 0;
 			const skipped = s && typeof s.patches_skipped === "number" ? s.patches_skipped : 0;
-			const settled = Math.min(total, applied + skipped);
-			const pct = total ? Math.round((settled / total) * 100) : 0;
+			const pct = total ? Math.round((applied / total) * 100) : 0;
 
 			const hostSurface = hostSurfaceOf(s);
 			const versions = (updateInfo && updateInfo.versions) || [];
@@ -1580,8 +1581,8 @@ body .dshp-dock:has(.dshp-root[data-theme="dusk"]) .dshp-dock-body .dshp-switch 
 				),
 				s ? h("div", { className: "dshp-metrics" },
 					h("div", { className: "dshp-metric" },
-						h("b", null, settled + " / " + total),
-						h("span", null, t("metric.purged")),
+						h("b", null, applied + " / " + total),
+						h("span", null, skipped > 0 ? t("metric.purged.skip", { n: skipped }) : t("metric.purged")),
 					),
 					h("div", { className: "dshp-metric" },
 						h("b", { style: { fontSize: 13, fontFamily: "var(--dshp-mono)", fontWeight: 500 } },
